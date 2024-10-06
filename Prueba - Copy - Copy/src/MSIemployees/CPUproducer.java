@@ -11,7 +11,7 @@ import java.util.concurrent.Semaphore;
  * @author chris
  */
 public class CPUproducer extends Worker {
-    public CPUproducer(Semaphore mutex, int ArtificialTime) {
-        super("CPUWorker: ", mutex, 3*ArtificialTime, 72, 26, 20, 1, ArtificialTime); 
+    public CPUproducer(Semaphore mutex, int ArtificialTime, int iteraciones) {
+        super("CPUWorker: ", mutex, 3*ArtificialTime, 72, 26, 20, 1, ArtificialTime, iteraciones, 3); 
     }
 }

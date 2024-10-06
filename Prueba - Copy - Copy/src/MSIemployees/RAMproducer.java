@@ -11,7 +11,7 @@ import java.util.concurrent.Semaphore;
  * @author chris
  */
 public class RAMproducer extends Worker {
-    public RAMproducer(Semaphore mutex, int ArtificialTime) {
-        super("RAMWorker: ", mutex, ArtificialTime, 24, 40, 55, 2, ArtificialTime); // Valores específicos para ProducerA
+    public RAMproducer(Semaphore mutex, int ArtificialTime, int iteraciones) {
+        super("RAMWorker: ", mutex, ArtificialTime, 24, 40, 55, 2, ArtificialTime, iteraciones, 1); // Valores específicos para ProducerA
     }
 }

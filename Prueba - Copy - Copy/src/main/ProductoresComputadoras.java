@@ -51,15 +51,15 @@ public class ProductoresComputadoras {
         
         
         Semaphore mutex = new Semaphore(1);
-        Worker trab1 = new MBproducer(mutex, milisegundos);
-        Worker trab2 = new CPUproducer(mutex, milisegundos);
-        Worker trab3 = new RAMproducer(mutex, milisegundos);
-        Worker trab4 = new PSproducer(mutex, milisegundos);
-        Worker trab5 = new GCproducer(mutex, milisegundos);
+        Worker trab1 = new MBproducer(mutex, milisegundos, totalDays);
+        Worker trab2 = new CPUproducer(mutex, milisegundos,totalDays);
+        Worker trab3 = new RAMproducer(mutex, milisegundos,totalDays);
+        Worker trab4 = new PSproducer(mutex, milisegundos,totalDays);
+        Worker trab5 = new GCproducer(mutex, milisegundos, totalDays);
         
-        Assembler trab6 = new Assembler(mutex, trab1, trab2,trab3,trab4,trab5, milisegundos);
-        ProjectManager trab7 = new ProjectManager(mutex, milisegundos, deathline);
-        Director trab8 = new Director(mutex, milisegundos, trab7);
+        Assembler trab6 = new Assembler(mutex, trab1, trab2,trab3,trab4,trab5, milisegundos, totalDays);
+        ProjectManager trab7 = new ProjectManager(mutex, milisegundos, deathline, totalDays);
+        Director trab8 = new Director(mutex, milisegundos, trab7, totalDays);
         
         
         
@@ -75,6 +75,25 @@ public class ProductoresComputadoras {
         trab8.start();
         
         trab1.timeCounter(totalDays);
+        
+        try {
+            // Esperar que todos los hilos terminen
+            trab1.join();
+            trab2.join();
+            trab3.join();
+            trab4.join();
+            trab5.join();
+            trab6.join();
+            trab7.join();
+            trab8.join();
+        } catch (InterruptedException e) {
+            Logger.getLogger(ProductoresComputadoras.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        
+        int costosOperativos=trab1.getTotalsalary()+trab2.getTotalsalary()+trab3.getTotalsalary()+trab4.getTotalsalary()+trab5.getTotalsalary()+trab6.getTotalsalary()+trab7.getTotalsalary()+trab8.getTotalsalary();
+
+        System.out.println("\n\nCostos Operativos: " + costosOperativos + "\n\n");
         
         
         

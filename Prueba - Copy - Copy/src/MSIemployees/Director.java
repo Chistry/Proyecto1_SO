@@ -27,11 +27,19 @@ public class Director extends Thread{
     private boolean anime;
     private int deathline;
     private ProjectManager ProjectManager;
-    
+    private int iteraciones;
+
+    public int getTotalsalary() {
+        return totalsalary;
+    }
+
+    public void setTotalsalary(int totalsalary) {
+        this.totalsalary = totalsalary;
+    }
 
     
     
-    public Director(Semaphore mutex, int ArtificialProductionTime, ProjectManager ProjectManager){
+    public Director(Semaphore mutex, int ArtificialProductionTime, ProjectManager ProjectManager, int iteraciones){
         this.name = name;
         this.mutex = mutex;
         this.ArtiproductionTime = ArtificialProductionTime;
@@ -41,7 +49,7 @@ public class Director extends Thread{
         this.anime=anime;
         this.deathline=deathline;
         this.ProjectManager=ProjectManager;
-        
+        this.iteraciones=iteraciones;
         
     }
     
@@ -52,8 +60,9 @@ public class Director extends Thread{
         Random random = new Random();
         double spyDuration = ArtiproductionTime*(7 / 288);
         int randomMoment = random.nextInt(ArtiproductionTime);    // Momento aleatorio en el día
+        int counter=0;
         
-        while(true){
+        while(counter!=this.iteraciones){
             try{
                 if (this.ProjectManager.getDeathline()==0){
                     System.out.println("Director trabajando en envio");
@@ -83,6 +92,7 @@ public class Director extends Thread{
             } catch(InterruptedException ex) {
                 Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
             }
+            counter++;
         }
     }
 }

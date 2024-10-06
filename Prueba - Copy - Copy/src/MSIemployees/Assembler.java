@@ -35,6 +35,7 @@ public class Assembler extends Thread{
     private Worker PSproducer;
     private Worker GCproducer;
     private int counter = 0;
+    private int iteraciones;
     
 
 
@@ -61,6 +62,14 @@ public class Assembler extends Thread{
     public void setProductionGC(int productionGC) {
         this.productionGC = productionGC;
     }
+
+    public int getTotalsalary() {
+        return totalsalary;
+    }
+
+    public void setTotalsalary(int totalsalary) {
+        this.totalsalary = totalsalary;
+    }
     
     
     
@@ -68,7 +77,7 @@ public class Assembler extends Thread{
 
     
     
-    public Assembler(Semaphore mutex, Worker MBproducer, Worker CPUproducer, Worker RAMproducer, Worker PSproducer, Worker GCproducer, int ArtificialTime){
+    public Assembler(Semaphore mutex, Worker MBproducer, Worker CPUproducer, Worker RAMproducer, Worker PSproducer, Worker GCproducer, int ArtificialTime, int iteraciones){
         this.mutex = mutex;
         this.MBproducer = MBproducer;
         this.CPUproducer = CPUproducer;
@@ -76,13 +85,15 @@ public class Assembler extends Thread{
         this.PSproducer = PSproducer;
         this.GCproducer = GCproducer;
         this.ArtiproductionTime= ArtificialTime;
+        this.iteraciones=iteraciones;
     }
     
     
         
     @Override
     public void run(){
-        while(true){
+        int counterIte = 0;
+        while(counterIte!=this.iteraciones){
             try{
                 if (counter < 6){
                     if (MBproducer.getProduction() >= 2 && CPUproducer.getProduction() >= 3 && RAMproducer.getProduction() >= 4 && PSproducer.getProduction() >= 6){
@@ -95,7 +106,7 @@ public class Assembler extends Thread{
                         RAMproducer.reduceProduction(4);
                         PSproducer.reduceProduction(6);
                         
-                        sleep(ArtiproductionTime*2);
+                        sleep(this.ArtiproductionTime*2);
                         totalsalary= (salary*productionTime) + totalsalary;
                         System.out.println(this.name);
                         System.out.println("Salario: "+this.totalsalary);
@@ -126,7 +137,7 @@ public class Assembler extends Thread{
                             counter=0;
                             productionGC = ++productionGC;
                             this.mutex.release(); //signal
-                        
+                            
                         
                             MBproducer.reduceProduction(2);
                             CPUproducer.reduceProduction(3);
@@ -134,7 +145,7 @@ public class Assembler extends Thread{
                             PSproducer.reduceProduction(6);
                             GCproducer.reduceProduction(5);
 
-                            sleep(ArtiproductionTime);
+                            sleep(this.ArtiproductionTime*2);
                             totalsalary= (salary*productionTime) + totalsalary;
                             System.out.println(this.name);
                             System.out.println("Salario: "+this.totalsalary);
@@ -167,6 +178,8 @@ public class Assembler extends Thread{
             } catch(InterruptedException ex) {
                 Logger.getLogger(Assembler.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            counterIte += 1;
         }
     }
 }

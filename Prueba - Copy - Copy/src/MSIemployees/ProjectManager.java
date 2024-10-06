@@ -25,6 +25,7 @@ public class ProjectManager extends Thread{
     private int totalsalary = 0;
     private boolean anime;
     private int deathline;
+    private int iteraciones;
     
 
     public int getDeathline() {
@@ -57,7 +58,7 @@ public class ProjectManager extends Thread{
 
     
     
-    public ProjectManager(Semaphore mutex, int ArtificialProductionTime, int deathline){
+    public ProjectManager(Semaphore mutex, int ArtificialProductionTime, int deathline, int iteraciones){
         this.name = name;
         this.mutex = mutex;
         this.ArtiproductionTime = ArtificialProductionTime;
@@ -66,6 +67,7 @@ public class ProjectManager extends Thread{
         this.productionTime = productionTime;
         this.anime=anime;
         this.deathline=deathline;
+        this.iteraciones=iteraciones;
        
         
         
@@ -77,8 +79,8 @@ public class ProjectManager extends Thread{
     public void run(){
         
         
-        
-        while(true){
+        int counter = 0;
+        while(counter!=this.iteraciones){
             try{
                 anime = true;  // Valor inicial del booleano
                 for (int i = 0; i < 32; i++) {
@@ -109,6 +111,7 @@ public class ProjectManager extends Thread{
             } catch(InterruptedException ex) {
                 Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
             }
+            counter+=1;
         }
     }
 }

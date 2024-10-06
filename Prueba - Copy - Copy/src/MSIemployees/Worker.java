@@ -28,6 +28,8 @@ public class Worker extends Thread{
     private int numproducts;
     private int dias=0;
     private int inmutableTime;
+    private int iteraciones;
+    private int multiplicator;
     
     
     
@@ -108,10 +110,10 @@ public class Worker extends Thread{
     }
     
     
-
+  
     
     
-    public Worker(String name, Semaphore mutex, int ArtiproductionTime, int productionTime,int salary, int maxproduction, int numproducts, int inmutableTime){
+    public Worker(String name, Semaphore mutex, int ArtiproductionTime, int productionTime,int salary, int maxproduction, int numproducts, int inmutableTime, int iteraciones, int multiplicator){
         this.name = name;
         this.mutex = mutex;
         this.ArtiproductionTime = ArtiproductionTime;
@@ -120,18 +122,17 @@ public class Worker extends Thread{
         this.productionTime = productionTime;
         this.numproducts = numproducts;
         this.inmutableTime = inmutableTime;
+        this.iteraciones = iteraciones;
+        this.multiplicator=multiplicator;
         
     }
     
     public void timeCounter(int totalDays){
-        while(true){
+        while(dias!=totalDays){
             try {
             sleep(this.inmutableTime);
             dias= ++dias;
             System.out.println("Dia: "+this.dias);
-            if (dias==totalDays){
-                System.exit(0);
-            }
             
             } catch (InterruptedException ex) {
                 Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
@@ -143,7 +144,8 @@ public class Worker extends Thread{
         
     @Override
     public void run(){
-        while(true){
+        int counter = 0;
+        while(counter!=this.iteraciones){
             try{
                 
                 if (production < maxproduction){
@@ -162,6 +164,7 @@ public class Worker extends Thread{
                     this.mutex.acquire(); //wait
                     production = maxproduction;
                     sleep(inmutableTime);
+                    
                     totalsalary= (salary*24) + totalsalary;
                     
                     System.out.println(this.name);
@@ -173,6 +176,8 @@ public class Worker extends Thread{
             } catch(InterruptedException ex) {
                 Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
             }
+            counter+=1;
+        
         }
         
     }

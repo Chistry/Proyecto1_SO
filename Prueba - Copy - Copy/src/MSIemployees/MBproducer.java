@@ -13,8 +13,8 @@ import java.util.concurrent.Semaphore;
  * @author chris
  */
 public class MBproducer extends Worker {
-    public MBproducer(Semaphore mutex, int ArtificialTime) {
-        super("MotherBoardWorker: ", mutex, 3*ArtificialTime, 72, 20, 25, 1, ArtificialTime); // Valores específicos para ProducerA
+    public MBproducer(Semaphore mutex, int ArtificialTime, int iteraciones) {
+        super("MotherBoardWorker: ", mutex, 3*ArtificialTime, 72, 20, 25, 1, ArtificialTime, iteraciones, 3); // Valores específicos para ProducerA
     }
     
     

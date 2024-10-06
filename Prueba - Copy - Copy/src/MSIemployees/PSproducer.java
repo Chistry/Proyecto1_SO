@@ -11,7 +11,7 @@ import java.util.concurrent.Semaphore;
  * @author chris
  */
 public class PSproducer extends Worker {
-    public PSproducer(Semaphore mutex, int ArtificialTime) {
-        super("PowerSuplyWorker: ", mutex, ArtificialTime, 24, 16, 35, 3, ArtificialTime); // Valores específicos para ProducerA
+    public PSproducer(Semaphore mutex, int ArtificialTime,int iteraciones) {
+        super("PowerSuplyWorker: ", mutex, ArtificialTime, 24, 16, 35, 3, ArtificialTime, iteraciones, 1); // Valores específicos para ProducerA
     }
 }
