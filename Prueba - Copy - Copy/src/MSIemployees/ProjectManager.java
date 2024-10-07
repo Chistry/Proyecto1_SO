@@ -27,6 +27,7 @@ public class ProjectManager extends Thread{
     private int deathline;
     private int iteraciones;
     
+    
 
     public int getDeathline() {
         return deathline;
@@ -105,7 +106,8 @@ public class ProjectManager extends Thread{
                     this.mutex.acquire(); //wait
                 } else {
                     this.mutex.release(); //signal
-                    this.deathline = deathline-1;
+                    this.deathline -= 1;
+                    
                 }
                 
             } catch(InterruptedException ex) {

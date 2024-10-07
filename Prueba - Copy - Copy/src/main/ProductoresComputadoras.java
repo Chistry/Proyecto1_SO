@@ -51,15 +51,17 @@ public class ProductoresComputadoras {
         
         
         Semaphore mutex = new Semaphore(1);
+        
         Worker trab1 = new MBproducer(mutex, milisegundos, totalDays);
         Worker trab2 = new CPUproducer(mutex, milisegundos,totalDays);
         Worker trab3 = new RAMproducer(mutex, milisegundos,totalDays);
         Worker trab4 = new PSproducer(mutex, milisegundos,totalDays);
         Worker trab5 = new GCproducer(mutex, milisegundos, totalDays);
-        
         Assembler trab6 = new Assembler(mutex, trab1, trab2,trab3,trab4,trab5, milisegundos, totalDays);
+        
+        
         ProjectManager trab7 = new ProjectManager(mutex, milisegundos, deathline, totalDays);
-        Director trab8 = new Director(mutex, milisegundos, trab7, totalDays);
+        Director trab8 = new Director(mutex, milisegundos, trab7, trab6 ,totalDays);
         
         
         
@@ -90,10 +92,11 @@ public class ProductoresComputadoras {
             Logger.getLogger(ProductoresComputadoras.class.getName()).log(Level.SEVERE, null, e);
         }
 
-        
+        int gananciaBruta= trab8.getVentas();
         int costosOperativos=trab1.getTotalsalary()+trab2.getTotalsalary()+trab3.getTotalsalary()+trab4.getTotalsalary()+trab5.getTotalsalary()+trab6.getTotalsalary()+trab7.getTotalsalary()+trab8.getTotalsalary();
+        int UtilidadEstudio= gananciaBruta-costosOperativos;
 
-        System.out.println("\n\nCostos Operativos: " + costosOperativos + "\n\n");
+        System.out.println("\n\nGanancia Bruta: "+gananciaBruta+"\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: "+UtilidadEstudio);
         
         
         

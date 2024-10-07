@@ -73,7 +73,13 @@ public class Assembler extends Thread{
     
     
     
-    
+    public void reduceProduction(int amount) {
+        if (this.production >= amount) {
+            this.production -= amount;
+        } else {
+            System.out.println("No hay suficientes productos para descontar.");
+        }
+    }
 
     
     
@@ -102,7 +108,9 @@ public class Assembler extends Thread{
                         
                         production = ++production;
                         MBproducer.reduceProduction(2);
+                        System.out.println(CPUproducer.getProduction());
                         CPUproducer.reduceProduction(3);
+                        System.out.println(CPUproducer.getProduction());
                         RAMproducer.reduceProduction(4);
                         PSproducer.reduceProduction(6);
                         
