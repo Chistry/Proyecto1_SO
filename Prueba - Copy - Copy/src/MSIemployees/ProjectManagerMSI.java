@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class ProjectManager extends Thread{
+public class ProjectManagerMSI extends Thread{
     private String name="Project Manager: ";
     private int salary=40;
     private int ArtiproductionTime;
@@ -59,7 +59,7 @@ public class ProjectManager extends Thread{
 
     
     
-    public ProjectManager(Semaphore mutex, int ArtificialProductionTime, int deathline, int iteraciones){
+    public ProjectManagerMSI(Semaphore mutex, int ArtificialProductionTime, int deathline, int iteraciones){
         this.name = name;
         this.mutex = mutex;
         this.ArtiproductionTime = ArtificialProductionTime;

@@ -8,14 +8,99 @@ package GUI;
  *
  * @author diego
  */
+import DellTrabajadores.*;
+import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 public class PantallaDell extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Pantalla1
-     */
+    
+    private int ensambladores = 1;
+    private int pm = 1;
+    private int cpuWorkers = 1;
+    private int ramWorkers = 1;
+    private int faWorkers = 1;
+    private int gpuWorkers = 1;
+    private final int MAX_WORKERS = 17;
+    private int totalAssignedWorkers = ensambladores + pm + cpuWorkers + ramWorkers + faWorkers + gpuWorkers;
+
+
     public PantallaDell() {
         initComponents();
+        actualizarLabels();
     }
+    
+    private void iniciarSimulacion(int milisegundos, int diastotales, int limite) {
+        Semaphore mutex = new Semaphore(1);
+        
+        Trabajador trab1 = new PBtrabajador(mutex, milisegundos, diastotales);
+        Trabajador trab2 = new CPUtrabajador(mutex, milisegundos, diastotales);
+        Trabajador trab3 = new RAMtrabajador(mutex, milisegundos, diastotales);
+        Trabajador trab4 = new FAtrabajador(mutex, milisegundos, diastotales);
+        Trabajador trab5 = new GPUtrabajador(mutex, milisegundos, diastotales);
+        Ensamblador trab6 = new Ensamblador(mutex, trab1, trab2, trab3, trab4, trab5, milisegundos, diastotales);
+        
+        ProjectManager trab7 = new ProjectManager(mutex, milisegundos, limite, diastotales);
+        Director trab8 = new Director(mutex, milisegundos, trab7, trab6, diastotales);
+
+        // Iniciar los threads
+        trab1.start();
+        trab2.start();
+        trab3.start();
+        trab4.start();
+        trab5.start();
+        trab6.start();
+        trab7.start();
+        trab8.start();
+
+        try {
+            // Esperar que todos los hilos terminen
+            trab1.join();
+            trab2.join();
+            trab3.join();
+            trab4.join();
+            trab5.join();
+            trab6.join();
+            trab7.join();
+            trab8.join();
+        } catch (InterruptedException e) {
+            Logger.getLogger(PantallaDell.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        // Calcular la ganancia y mostrar los resultados
+        int gananciaBruta = trab8.getVentas();
+        int costosOperativos = trab1.getSalariototal() + trab2.getSalariototal() + trab3.getSalariototal() + trab4.getSalariototal() + trab5.getSalariototal() + trab6.getSalariototal() + trab7.getSalariototal() + trab8.getSalariototal();
+        int UtilidadEstudio = gananciaBruta - costosOperativos;
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Ganancia Bruta: " + gananciaBruta + "\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: " + UtilidadEstudio);
+    }
+
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new PantallaDell().setVisible(true);
+            }
+        });
+    }
+    
+    // Función para verificar si se pueden asignar más trabajadores
+    private boolean verificarAsignacion() {
+        return totalAssignedWorkers < MAX_WORKERS;
+    }
+    // Acciones para los botones de "+" y "-" de ensambladores
+
+    
+    private void actualizarLabels() {
+        qtyEnsamblador.setText(String.valueOf(ensambladores));
+        qtyPM2.setText(String.valueOf(pm));
+        qtyCPU1.setText(String.valueOf(cpuWorkers));
+        qtyRAM1.setText(String.valueOf(ramWorkers));
+        qtyFA1.setText(String.valueOf(faWorkers));
+        qtyGPU1.setText(String.valueOf(gpuWorkers));
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -152,7 +237,7 @@ public class PantallaDell extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel13.setText("Ensamblador");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, -1, -1));
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 380, -1, -1));
 
         jLabel14.setText("Amonestaciones: ");
         jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, 110, -1));
@@ -189,24 +274,24 @@ public class PantallaDell extends javax.swing.JFrame {
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel23.setText("Placa Madre");
-        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 80, -1));
+        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 80, -1));
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel24.setText("CPU");
-        jPanel2.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, -1, -1));
+        jPanel2.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, -1, -1));
 
         jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel25.setText("RAM ");
-        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 260, -1, -1));
+        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 260, -1, -1));
 
         jLabel26.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel26.setText("Fuente Poder");
-        jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 90, 20));
+        jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 90, 20));
 
         jLabel27.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel27.setText("GPU");
-        jPanel2.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 340, -1, -1));
+        jPanel2.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 340, -1, -1));
 
         masEnsamblador.setText("+");
         masEnsamblador.addActionListener(new java.awt.event.ActionListener() {
@@ -214,10 +299,15 @@ public class PantallaDell extends javax.swing.JFrame {
                 masEnsambladorActionPerformed(evt);
             }
         });
-        jPanel2.add(masEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 380, 30, 30));
+        jPanel2.add(masEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 380, 50, 30));
 
         menosEnsamblador.setText("-");
-        jPanel2.add(menosEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 380, 30, 30));
+        menosEnsamblador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosEnsambladorActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 380, 50, 30));
 
         masPM.setText("+");
         masPM.addActionListener(new java.awt.event.ActionListener() {
@@ -225,7 +315,7 @@ public class PantallaDell extends javax.swing.JFrame {
                 masPMActionPerformed(evt);
             }
         });
-        jPanel2.add(masPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 30, 30));
+        jPanel2.add(masPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 50, 30));
 
         masCPU.setText("+");
         masCPU.addActionListener(new java.awt.event.ActionListener() {
@@ -233,7 +323,7 @@ public class PantallaDell extends javax.swing.JFrame {
                 masCPUActionPerformed(evt);
             }
         });
-        jPanel2.add(masCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, 30, 30));
+        jPanel2.add(masCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, 50, 30));
 
         masRAM.setText("+");
         masRAM.addActionListener(new java.awt.event.ActionListener() {
@@ -241,7 +331,7 @@ public class PantallaDell extends javax.swing.JFrame {
                 masRAMActionPerformed(evt);
             }
         });
-        jPanel2.add(masRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 260, 30, 30));
+        jPanel2.add(masRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 260, 50, 30));
 
         masFA.setText("+");
         masFA.addActionListener(new java.awt.event.ActionListener() {
@@ -249,7 +339,7 @@ public class PantallaDell extends javax.swing.JFrame {
                 masFAActionPerformed(evt);
             }
         });
-        jPanel2.add(masFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 300, 30, 30));
+        jPanel2.add(masFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 300, 50, 30));
 
         masGPU.setText("+");
         masGPU.addActionListener(new java.awt.event.ActionListener() {
@@ -257,22 +347,47 @@ public class PantallaDell extends javax.swing.JFrame {
                 masGPUActionPerformed(evt);
             }
         });
-        jPanel2.add(masGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, 30, 30));
+        jPanel2.add(masGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, 50, 30));
 
         menosPM.setText("-");
-        jPanel2.add(menosPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 30, 30));
+        menosPM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosPMActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, 50, 30));
 
         menosCPU.setText("-");
-        jPanel2.add(menosCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 220, 30, 30));
+        menosCPU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosCPUActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, 50, 30));
 
         menosRAM.setText("-");
-        jPanel2.add(menosRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 260, 30, 30));
+        menosRAM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosRAMActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, 50, 30));
 
         menosFA.setText("-");
-        jPanel2.add(menosFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 300, 30, 30));
+        menosFA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosFAActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 300, 50, 30));
 
         menosGPU.setText("-");
-        jPanel2.add(menosGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 340, 30, 30));
+        menosGPU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosGPUActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 340, 50, 30));
 
         EstadoDirector.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         EstadoDirector.setText("0");
@@ -280,27 +395,27 @@ public class PantallaDell extends javax.swing.JFrame {
 
         qtyEnsamblador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         qtyEnsamblador.setText("0");
-        jPanel2.add(qtyEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 380, -1, 30));
+        jPanel2.add(qtyEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 380, -1, 30));
 
         qtyCPU1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         qtyCPU1.setText("0");
-        jPanel2.add(qtyCPU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 220, -1, 30));
+        jPanel2.add(qtyCPU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, -1, 30));
 
         qtyRAM1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         qtyRAM1.setText("0");
-        jPanel2.add(qtyRAM1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 260, -1, 30));
+        jPanel2.add(qtyRAM1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 260, -1, 30));
 
         qtyFA1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         qtyFA1.setText("0");
-        jPanel2.add(qtyFA1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 300, -1, 30));
+        jPanel2.add(qtyFA1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 300, -1, 30));
 
         qtyGPU1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         qtyGPU1.setText("0");
-        jPanel2.add(qtyGPU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 340, -1, 30));
+        jPanel2.add(qtyGPU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 340, -1, 30));
 
         qtyPM2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         qtyPM2.setText("0");
-        jPanel2.add(qtyPM2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, -1, 30));
+        jPanel2.add(qtyPM2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 180, -1, 30));
 
         qtyConGPU1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         qtyConGPU1.setText("0");
@@ -363,68 +478,143 @@ public class PantallaDell extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        try {
+            
+            if (totalAssignedWorkers == MAX_WORKERS) {
+                // Iniciar la simulación
+                // Solicitar los milisegundos
+                String milisegundosInput = javax.swing.JOptionPane.showInputDialog(this, "Por favor, ingrese un número de milisegundos (1000 milisegundos = 1 segundo):");
+                int milisegundos = Integer.parseInt(milisegundosInput);
+
+                // Solicitar el número de días
+                String diasInput = javax.swing.JOptionPane.showInputDialog(this, "Por favor, ingrese el número de días:");
+                int diastotales = Integer.parseInt(diasInput);
+
+                // Solicitar la DEATHLINE
+                String limiteInput = javax.swing.JOptionPane.showInputDialog(this, "Por favor, inserte la DEATHLINE en días:");
+                int limite = Integer.parseInt(limiteInput);
+
+                // Iniciar la simulación con los valores capturados
+                iniciarSimulacion(milisegundos, diastotales, limite);
+                
+                System.out.println("Simulación iniciada con la siguiente asignación:");
+                System.out.println("Ensambladores: " + ensambladores);
+                System.out.println("Project Managers: " + pm);
+                System.out.println("Trabajadores CPU: " + cpuWorkers);
+                System.out.println("Trabajadores RAM: " + ramWorkers);
+                System.out.println("Trabajadores FA: " + faWorkers);
+                System.out.println("Trabajadores GPU: " + gpuWorkers);
+            } else {
+                System.out.println("Asegúrate de asignar un total de " + MAX_WORKERS + " trabajadores.");
+            }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, ingrese valores válidos.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void masEnsambladorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masEnsambladorActionPerformed
-        // TODO add your handling code here:
+        if (verificarAsignacion()) {
+            ensambladores++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
     }//GEN-LAST:event_masEnsambladorActionPerformed
 
     private void masPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masPMActionPerformed
-        // TODO add your handling code here:
+        if (verificarAsignacion()) {
+            pm++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
     }//GEN-LAST:event_masPMActionPerformed
-
+    
     private void masCPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masCPUActionPerformed
-        // TODO add your handling code here:
+        if (verificarAsignacion()) {
+            cpuWorkers++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
     }//GEN-LAST:event_masCPUActionPerformed
-
+ 
+    
     private void masRAMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masRAMActionPerformed
-        // TODO add your handling code here:
+        if (verificarAsignacion()) {
+            ramWorkers++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
     }//GEN-LAST:event_masRAMActionPerformed
 
     private void masFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masFAActionPerformed
-        // TODO add your handling code here:
+        if (verificarAsignacion()) {
+            faWorkers++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
     }//GEN-LAST:event_masFAActionPerformed
 
     private void masGPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masGPUActionPerformed
-        // TODO add your handling code here:
+        if (verificarAsignacion()) {
+            gpuWorkers++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
     }//GEN-LAST:event_masGPUActionPerformed
 
+    private void menosPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosPMActionPerformed
+        if (pm > 1) {
+            pm--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_menosPMActionPerformed
+
+    private void menosCPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosCPUActionPerformed
+        if (cpuWorkers > 1) {
+            cpuWorkers--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_menosCPUActionPerformed
+
+    private void menosEnsambladorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosEnsambladorActionPerformed
+        if (ensambladores > 1) {
+            ensambladores--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_menosEnsambladorActionPerformed
+
+    private void menosRAMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosRAMActionPerformed
+        if (ramWorkers > 1) {
+            ramWorkers--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }        
+    }//GEN-LAST:event_menosRAMActionPerformed
+
+    private void menosFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosFAActionPerformed
+        if (faWorkers > 1) {
+            faWorkers--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_menosFAActionPerformed
+
+    private void menosGPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosGPUActionPerformed
+        if (gpuWorkers > 1) {
+            gpuWorkers--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_menosGPUActionPerformed
+     
+
+                                    
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PantallaDell.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PantallaDell.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PantallaDell.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PantallaDell.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PantallaDell().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Costor;

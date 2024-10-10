@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class Director extends Thread{
+public class DirectorMSI extends Thread{
     private String name="Director: ";
     private int salary=60;
     private int ArtiproductionTime;
@@ -26,7 +26,7 @@ public class Director extends Thread{
     private int totalsalary = 0;
     private boolean anime;
     private int deathlineDirector;
-    private ProjectManager ProjectManager;
+    private ProjectManagerMSI ProjectManager;
     private Assembler Assembler;
     private int iteraciones;
     private int ventas=0;
@@ -58,7 +58,7 @@ public class Director extends Thread{
     
     
     
-    public Director(Semaphore mutex, int ArtificialProductionTime, ProjectManager ProjectManager, Assembler assembler, int iteraciones){
+    public DirectorMSI(Semaphore mutex, int ArtificialProductionTime, ProjectManagerMSI ProjectManager, Assembler assembler, int iteraciones){
         this.name = name;
         this.mutex = mutex;
         this.ArtiproductionTime = ArtificialProductionTime;
@@ -79,7 +79,7 @@ public class Director extends Thread{
     // Eliminar el uso de originaldeathline dentro del ciclo del director
 
 public void run() {
-    // Guardamos el valor inicial de deathline en Director
+    // Guardamos el valor inicial de deathline en DirectorMSI
     int originaldeathline = ProjectManager.getDeathline();
     deathlineDirector= ProjectManager.getDeathline();
     Random random = new Random();
