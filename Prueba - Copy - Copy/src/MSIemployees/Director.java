@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 
 public class Director extends Thread{
-    private String name="Project Manager: ";
+    private String name="Director: ";
     private int salary=60;
     private int ArtiproductionTime;
     private int productionTime;
@@ -126,6 +126,7 @@ public void run() {
                     // Verificar si el Project Manager está viendo anime
                     if (ProjectManager.isAnime()) {
                         System.out.println("El Project Manager esta viendo anime durante el descanso.");
+                        ProjectManager.setTotalsalary(ProjectManager.getTotalsalary() - 100);
                     } else {
                         System.out.println("El Project Manager no esta viendo anime.");
                     }
