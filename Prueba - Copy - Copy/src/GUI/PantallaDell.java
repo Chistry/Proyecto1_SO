@@ -22,7 +22,7 @@ public class PantallaDell extends javax.swing.JFrame {
     private int ramWorkers = 1;
     private int faWorkers = 1;
     private int gpuWorkers = 1;
-    private final int MAX_WORKERS = 17;
+    private final int MAX_WORKERS = 16;
     private int totalAssignedWorkers = ensambladores + pm + cpuWorkers + ramWorkers + faWorkers + gpuWorkers;
 
 
