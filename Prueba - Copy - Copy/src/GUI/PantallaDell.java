@@ -72,8 +72,10 @@ public class PantallaDell extends javax.swing.JFrame {
         int gananciaBruta = trab8.getVentas();
         int costosOperativos = trab1.getSalariototal() + trab2.getSalariototal() + trab3.getSalariototal() + trab4.getSalariototal() + trab5.getSalariototal() + trab6.getSalariototal() + trab7.getSalariototal() + trab8.getSalariototal();
         int UtilidadEstudio = gananciaBruta - costosOperativos;
-
-        javax.swing.JOptionPane.showMessageDialog(this, "Ganancia Bruta: " + gananciaBruta + "\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: " + UtilidadEstudio);
+        Ingresos.setText(String.valueOf(gananciaBruta)+"$");
+        Costor.setText(String.valueOf(costosOperativos)+"$");
+        GananciasTotales.setText(String.valueOf(UtilidadEstudio)+"$");
+        //javax.swing.JOptionPane.showMessageDialog(this, "Ganancia Bruta: " + gananciaBruta + "\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: " + UtilidadEstudio);
     }
 
     public static void main(String args[]) {
@@ -170,7 +172,7 @@ public class PantallaDell extends javax.swing.JFrame {
         qtyFAs1 = new javax.swing.JLabel();
         qtyGPUs1 = new javax.swing.JLabel();
         qtyDiasRestantes2 = new javax.swing.JLabel();
-        qtyGananciasTotales = new javax.swing.JLabel();
+        GananciasTotales = new javax.swing.JLabel();
         Ingresos = new javax.swing.JLabel();
         Costor = new javax.swing.JLabel();
 
@@ -221,7 +223,7 @@ public class PantallaDell extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel9.setText("Costos:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 410, 120, 20));
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 410, 60, 20));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel10.setText("GPU:");
@@ -258,15 +260,15 @@ public class PantallaDell extends javax.swing.JFrame {
 
         jLabel19.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel19.setText("Dias Restantes: ");
-        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 310, 180, 20));
+        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 310, 130, 20));
 
         jLabel20.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel20.setText("Ingresos:");
-        jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 370, 120, 20));
+        jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 370, 80, 20));
 
         jLabel21.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel21.setText("Ganancias Totales:");
-        jPanel2.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 340, 180, 20));
+        jPanel2.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 340, 120, 20));
 
         jLabel22.setText("Estatus:");
         jPanel2.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 40, -1));
@@ -457,19 +459,19 @@ public class PantallaDell extends javax.swing.JFrame {
 
         qtyDiasRestantes2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         qtyDiasRestantes2.setText("0");
-        jPanel2.add(qtyDiasRestantes2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 310, 20, 20));
+        jPanel2.add(qtyDiasRestantes2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 310, 130, 20));
 
-        qtyGananciasTotales.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        qtyGananciasTotales.setText("0");
-        jPanel2.add(qtyGananciasTotales, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 340, 20, 20));
+        GananciasTotales.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        GananciasTotales.setText("0");
+        jPanel2.add(GananciasTotales, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 340, 120, 20));
 
         Ingresos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         Ingresos.setText("0");
-        jPanel2.add(Ingresos, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 370, -1, -1));
+        jPanel2.add(Ingresos, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 370, 110, -1));
 
         Costor.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         Costor.setText("0");
-        jPanel2.add(Costor, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 410, -1, -1));
+        jPanel2.add(Costor, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 410, 100, -1));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
 
@@ -619,6 +621,7 @@ public class PantallaDell extends javax.swing.JFrame {
     private javax.swing.JLabel Costor;
     private javax.swing.JLabel EstadoDirector;
     private javax.swing.JLabel EstadoProjectManager;
+    private javax.swing.JLabel GananciasTotales;
     private javax.swing.JLabel Ingresos;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -673,7 +676,6 @@ public class PantallaDell extends javax.swing.JFrame {
     private javax.swing.JLabel qtyFAs1;
     private javax.swing.JLabel qtyGPU1;
     private javax.swing.JLabel qtyGPUs1;
-    private javax.swing.JLabel qtyGananciasTotales;
     private javax.swing.JLabel qtyPM2;
     private javax.swing.JLabel qtyPMs1;
     private javax.swing.JLabel qtyRAM1;

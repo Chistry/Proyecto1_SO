@@ -103,8 +103,10 @@ public class PantallaMSI extends javax.swing.JFrame {
         int gananciaBruta = trab8.getVentas();
         int costosOperativos = trab1.getTotalsalary() + trab2.getTotalsalary() + trab3.getTotalsalary() + trab4.getTotalsalary() + trab5.getTotalsalary() + trab6.getTotalsalary() + trab7.getTotalsalary() + trab8.getTotalsalary();
         int UtilidadEstudio = gananciaBruta - costosOperativos;
-
-        javax.swing.JOptionPane.showMessageDialog(this, "Ganancia Bruta: " + gananciaBruta + "\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: " + UtilidadEstudio);
+        bruto.setText(String.valueOf(gananciaBruta)+"$");
+        costos.setText(String.valueOf(costosOperativos)+"$");
+        ganaciasTotales.setText(String.valueOf(UtilidadEstudio)+"$");
+        //javax.swing.JOptionPane.showMessageDialog(this, "Ganancia Bruta: " + gananciaBruta + "\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: " + UtilidadEstudio);
     }
 
     /**
@@ -163,7 +165,11 @@ public class PantallaMSI extends javax.swing.JFrame {
         workersram = new javax.swing.JLabel();
         workersPS = new javax.swing.JLabel();
         workersgc = new javax.swing.JLabel();
-        workersAssembler = new javax.swing.JLabel();
+        costos = new javax.swing.JLabel();
+        workersAssembler1 = new javax.swing.JLabel();
+        workersAssembler2 = new javax.swing.JLabel();
+        bruto = new javax.swing.JLabel();
+        ganaciasTotales = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -212,7 +218,7 @@ public class PantallaMSI extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel9.setText("Costos:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 410, 120, 20));
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 400, 60, 20));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel10.setText("GPU:");
@@ -230,7 +236,7 @@ public class PantallaMSI extends javax.swing.JFrame {
         jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, -1, -1));
 
         jLabel14.setText("Amonestaciones: ");
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, 110, -1));
+        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, 120, -1));
 
         jLabel15.setText("Descontado: ");
         jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 180, 110, -1));
@@ -249,18 +255,18 @@ public class PantallaMSI extends javax.swing.JFrame {
 
         jLabel19.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel19.setText("Dias Restantes: ");
-        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 310, 180, 20));
+        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 310, 130, 20));
 
         jLabel20.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel20.setText("Ingresos:");
-        jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 370, 120, 20));
+        jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 370, 70, 20));
 
         jLabel21.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel21.setText("Ganancias Totales:");
-        jPanel2.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 340, 180, 20));
+        jPanel2.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 340, 150, 20));
 
         jLabel22.setText("Estatus:");
-        jPanel2.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 40, -1));
+        jPanel2.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 60, -1));
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel23.setText("Placa Madre");
@@ -399,9 +405,25 @@ public class PantallaMSI extends javax.swing.JFrame {
         workersgc.setText("0");
         jPanel2.add(workersgc, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, -1, 30));
 
-        workersAssembler.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        workersAssembler.setText("0");
-        jPanel2.add(workersAssembler, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, -1, 30));
+        costos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        costos.setText("0");
+        jPanel2.add(costos, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 400, 110, 20));
+
+        workersAssembler1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        workersAssembler1.setText("0");
+        jPanel2.add(workersAssembler1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, -1, 30));
+
+        workersAssembler2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        workersAssembler2.setText("0");
+        jPanel2.add(workersAssembler2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 310, 100, 20));
+
+        bruto.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        bruto.setText("0");
+        jPanel2.add(bruto, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 370, 110, 20));
+
+        ganaciasTotales.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        ganaciasTotales.setText("0");
+        jPanel2.add(ganaciasTotales, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 340, 100, 20));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
 
@@ -586,15 +608,19 @@ public class PantallaMSI extends javax.swing.JFrame {
 
     
     private void actualizarLabels() {
-        workersAssembler.setText(String.valueOf(ensambladores));
+        workersAssembler1.setText(String.valueOf(ensambladores));
         workersMB.setText(String.valueOf(pm));
         workerscpu.setText(String.valueOf(cpuWorkers));
         workersram.setText(String.valueOf(ramWorkers));
         workersPS.setText(String.valueOf(faWorkers));
         workersgc.setText(String.valueOf(gpuWorkers));
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel bruto;
+    private javax.swing.JLabel costos;
+    private javax.swing.JLabel ganaciasTotales;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -637,7 +663,8 @@ public class PantallaMSI extends javax.swing.JFrame {
     private javax.swing.JButton menosGPU;
     private javax.swing.JButton menosPM;
     private javax.swing.JButton menosRAM;
-    private javax.swing.JLabel workersAssembler;
+    private javax.swing.JLabel workersAssembler1;
+    private javax.swing.JLabel workersAssembler2;
     private javax.swing.JLabel workersMB;
     private javax.swing.JLabel workersPS;
     private javax.swing.JLabel workerscpu;
