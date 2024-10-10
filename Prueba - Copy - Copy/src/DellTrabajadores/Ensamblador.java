@@ -112,15 +112,15 @@ public class Ensamblador extends Thread{
         int contadorIte = 0;
         while(contadorIte != this.iteraciones){
             try{
-                if (contador<6){
-                    if(PBtrabajador.getProduccion() >= 2 && CPUtrabajador.getProduccion() >= 3 && RAMtrabajador.getProduccion()>=4 && FAtrabajador.getProduccion()>=6){
+                if (contador<3){
+                    if(PBtrabajador.getProduccion() >= 1 && CPUtrabajador.getProduccion() >= 5 && RAMtrabajador.getProduccion()>=6 && FAtrabajador.getProduccion()>=5){
                         this.mutex.release();
                         
                         produccion = ++produccion;
-                        PBtrabajador.reducirProdu(2);
-                        CPUtrabajador.reducirProdu(3);
-                        RAMtrabajador.reducirProdu(4);
-                        FAtrabajador.reducirProdu(6);
+                        PBtrabajador.reducirProdu(1);
+                        CPUtrabajador.reducirProdu(5);
+                        RAMtrabajador.reducirProdu(6);
+                        FAtrabajador.reducirProdu(5);
                         
                         sleep(this.tiempoProduArti*2);
                         salariototal=(salario*tiempoProdu)+salariototal;
@@ -132,16 +132,16 @@ public class Ensamblador extends Thread{
                         
                     }
                 } else{
-                    if (PBtrabajador.getProduccion()>=2 && CPUtrabajador.getProduccion()>=3 && RAMtrabajador.getProduccion() >=4 && FAtrabajador.getProduccion() >= 6 && GPUtrabajador.getProduccion()>=5){
+                    if (PBtrabajador.getProduccion()>=1 && CPUtrabajador.getProduccion()>=5 && RAMtrabajador.getProduccion() >=6 && FAtrabajador.getProduccion() >= 5 && GPUtrabajador.getProduccion()>=1){
                         contador=0;
                         produccionGPU = ++produccionGPU;
                         this.mutex.release();
                         
-                        PBtrabajador.reducirProdu(2);
-                        CPUtrabajador.reducirProdu(3);
-                        RAMtrabajador.reducirProdu(4);
-                        FAtrabajador.reducirProdu(6);
-                        GPUtrabajador.reducirProdu(5);
+                        PBtrabajador.reducirProdu(1);
+                        CPUtrabajador.reducirProdu(5);
+                        RAMtrabajador.reducirProdu(6);
+                        FAtrabajador.reducirProdu(5);
+                        GPUtrabajador.reducirProdu(1);
                         
                         sleep(this.tiempoProduArti*2);
                         salariototal = (salario*tiempoProdu)+salariototal;

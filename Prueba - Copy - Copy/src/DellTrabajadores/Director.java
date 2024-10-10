@@ -110,10 +110,10 @@ public void run() {
                         if (this.Ensamblador.getProduccionGPU() > 0 || this.Ensamblador.getProduccion() > 0) {
                             if (this.Ensamblador.getProduccionGPU()> 0) {
                                 this.Ensamblador.setProduccionGPU(this.Ensamblador.getProduccionGPU()- 1);
-                                ventas += 250000;
+                                ventas += 120000;
                             } else {
                                 this.Ensamblador.setProduccion(this.Ensamblador.getProduccion()- 1);
-                                ventas += 180000;
+                                ventas += 80000;
                             }
                         }
 
