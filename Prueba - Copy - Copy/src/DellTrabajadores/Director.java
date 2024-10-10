@@ -70,7 +70,7 @@ public class Director extends Thread {
     public void setVentas(int ventas) {
         this.ventas = ventas;
     }
-    public Director(Semaphore mutex, int tiempoPorduArti, ProjectManager ProjectManager, Ensamblador ensamblador, int iteraciones){
+    public Director(Semaphore mutex, int tiempoProduArti, ProjectManager ProjectManager, Ensamblador ensamblador, int iteraciones){
         this.nombre = nombre;
         this.mutex = mutex;
         this.tiempoProduArti = tiempoProduArti;

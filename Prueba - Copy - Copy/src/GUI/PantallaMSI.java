@@ -4,17 +4,107 @@
  */
 package GUI;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import MSIemployees.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.concurrent.Semaphore;
+
 /**
  *
  * @author diego
  */
+
+
 public class PantallaMSI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Pantalla1
-     */
+    private int ensambladores = 1;
+    private int pm = 1;
+    private int cpuWorkers = 1;
+    private int ramWorkers = 1;
+    private int faWorkers = 1;
+    private int gpuWorkers = 1;
+    private final int MAX_WORKERS = 17;
+    private int totalAssignedWorkers = ensambladores + pm + cpuWorkers + ramWorkers + faWorkers + gpuWorkers;
+    
     public PantallaMSI() {
         initComponents();
+        actualizarLabels();
+    }
+    
+    public static void guardarParametros(double segundos, int deathline, int n) {
+        File file = new File("parametros.txt");
+
+        try {
+            // Crear el archivo si no existe
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            // Usar FileWriter para escribir en el archivo
+            FileWriter writer = new FileWriter(file, true); // 'true' para agregar sin sobrescribir
+
+            writer.write("Segundos: " + segundos + "\n");
+            writer.write("Deathline: " + deathline + "\n");
+            writer.write("N: " + n + "\n");
+            writer.write("-------------------------\n");
+
+            writer.close();
+
+            System.out.println("Parámetros guardados en parametros.txt");
+
+        } catch (IOException e) {
+            System.out.println("Ocurrió un error al guardar los parámetros.");
+            e.printStackTrace();
+        }
+    }
+    
+    
+    private void iniciarSimulacion(int milisegundos, int diastotales, int limite) {
+        Semaphore mutex = new Semaphore(1);
+        
+        Worker trab1 = new MBproducer(mutex, milisegundos, diastotales);
+        Worker trab2 = new CPUproducer(mutex, milisegundos, diastotales);
+        Worker trab3 = new RAMproducer(mutex, milisegundos, diastotales);
+        Worker trab4 = new PSproducer(mutex, milisegundos, diastotales);
+        Worker trab5 = new GCproducer(mutex, milisegundos, diastotales);
+        Assembler trab6 = new Assembler(mutex, trab1, trab2, trab3, trab4, trab5, milisegundos, diastotales);
+        
+        ProjectManagerMSI trab7 = new ProjectManagerMSI(mutex, milisegundos, limite, diastotales);
+        DirectorMSI trab8 = new DirectorMSI(mutex, milisegundos, trab7, trab6, diastotales);
+
+        // Iniciar los threads
+        trab1.start();
+        trab2.start();
+        trab3.start();
+        trab4.start();
+        trab5.start();
+        trab6.start();
+        trab7.start();
+        trab8.start();
+
+        try {
+            // Esperar que todos los hilos terminen
+            trab1.join();
+            trab2.join();
+            trab3.join();
+            trab4.join();
+            trab5.join();
+            trab6.join();
+            trab7.join();
+            trab8.join();
+        } catch (InterruptedException e) {
+            Logger.getLogger(PantallaDell.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        // Calcular la ganancia y mostrar los resultados
+        int gananciaBruta = trab8.getVentas();
+        int costosOperativos = trab1.getTotalsalary() + trab2.getTotalsalary() + trab3.getTotalsalary() + trab4.getTotalsalary() + trab5.getTotalsalary() + trab6.getTotalsalary() + trab7.getTotalsalary() + trab8.getTotalsalary();
+        int UtilidadEstudio = gananciaBruta - costosOperativos;
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Ganancia Bruta: " + gananciaBruta + "\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: " + UtilidadEstudio);
     }
 
     /**
@@ -68,7 +158,12 @@ public class PantallaMSI extends javax.swing.JFrame {
         menosRAM = new javax.swing.JButton();
         menosFA = new javax.swing.JButton();
         menosGPU = new javax.swing.JButton();
-        Fondo = new javax.swing.JLabel();
+        workersMB = new javax.swing.JLabel();
+        workerscpu = new javax.swing.JLabel();
+        workersram = new javax.swing.JLabel();
+        workersPS = new javax.swing.JLabel();
+        workersgc = new javax.swing.JLabel();
+        workersAssembler = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -132,7 +227,7 @@ public class PantallaMSI extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel13.setText("Ensamblador");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, -1, -1));
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, -1, -1));
 
         jLabel14.setText("Amonestaciones: ");
         jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, 110, -1));
@@ -169,24 +264,24 @@ public class PantallaMSI extends javax.swing.JFrame {
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel23.setText("Placa Madre");
-        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 80, -1));
+        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 80, -1));
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel24.setText("CPU");
-        jPanel2.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, -1, -1));
+        jPanel2.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
 
         jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel25.setText("RAM ");
-        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 210, -1, -1));
+        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 220, -1, -1));
 
         jLabel26.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel26.setText("Fuente Poder");
-        jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 90, 20));
+        jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 90, 20));
 
         jLabel27.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel27.setText("GPU");
-        jPanel2.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 290, -1, -1));
+        jPanel2.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 300, -1, -1));
 
         masEnsamblador.setText("+");
         masEnsamblador.addActionListener(new java.awt.event.ActionListener() {
@@ -194,10 +289,15 @@ public class PantallaMSI extends javax.swing.JFrame {
                 masEnsambladorActionPerformed(evt);
             }
         });
-        jPanel2.add(masEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 30, 30));
+        jPanel2.add(masEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, 50, 30));
 
         menosEnsamblador.setText("-");
-        jPanel2.add(menosEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 330, 30, 30));
+        menosEnsamblador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosEnsambladorActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 50, 30));
 
         masPM.setText("+");
         masPM.addActionListener(new java.awt.event.ActionListener() {
@@ -205,7 +305,7 @@ public class PantallaMSI extends javax.swing.JFrame {
                 masPMActionPerformed(evt);
             }
         });
-        jPanel2.add(masPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 130, 30, 30));
+        jPanel2.add(masPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 130, 50, 30));
 
         masCPU.setText("+");
         masCPU.addActionListener(new java.awt.event.ActionListener() {
@@ -213,7 +313,7 @@ public class PantallaMSI extends javax.swing.JFrame {
                 masCPUActionPerformed(evt);
             }
         });
-        jPanel2.add(masCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, 30, 30));
+        jPanel2.add(masCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 170, 50, 30));
 
         masRAM.setText("+");
         masRAM.addActionListener(new java.awt.event.ActionListener() {
@@ -221,7 +321,7 @@ public class PantallaMSI extends javax.swing.JFrame {
                 masRAMActionPerformed(evt);
             }
         });
-        jPanel2.add(masRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, 30, 30));
+        jPanel2.add(masRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 210, 50, 30));
 
         masFA.setText("+");
         masFA.addActionListener(new java.awt.event.ActionListener() {
@@ -229,7 +329,7 @@ public class PantallaMSI extends javax.swing.JFrame {
                 masFAActionPerformed(evt);
             }
         });
-        jPanel2.add(masFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 250, 30, 30));
+        jPanel2.add(masFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, 50, 30));
 
         masGPU.setText("+");
         masGPU.addActionListener(new java.awt.event.ActionListener() {
@@ -237,58 +337,207 @@ public class PantallaMSI extends javax.swing.JFrame {
                 masGPUActionPerformed(evt);
             }
         });
-        jPanel2.add(masGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 290, 30, 30));
+        jPanel2.add(masGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 50, 30));
 
         menosPM.setText("-");
-        jPanel2.add(menosPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, 30, 30));
+        menosPM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosPMActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 50, 30));
 
         menosCPU.setText("-");
-        jPanel2.add(menosCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 30, 30));
+        menosCPU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosCPUActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 50, 30));
 
         menosRAM.setText("-");
-        jPanel2.add(menosRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 30, 30));
+        menosRAM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosRAMActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 50, 30));
 
         menosFA.setText("-");
-        jPanel2.add(menosFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 250, 30, 30));
+        menosFA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosFAActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 50, 30));
 
         menosGPU.setText("-");
-        jPanel2.add(menosGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 290, 30, 30));
+        menosGPU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menosGPUActionPerformed(evt);
+            }
+        });
+        jPanel2.add(menosGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 290, 50, 30));
 
-        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/WhatsApp Image 2024-10-10 at 10.37.19 AM.jpeg"))); // NOI18N
-        jPanel2.add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
+        workersMB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        workersMB.setText("0");
+        jPanel2.add(workersMB, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 130, -1, 30));
+
+        workerscpu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        workerscpu.setText("0");
+        jPanel2.add(workerscpu, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 170, -1, 30));
+
+        workersram.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        workersram.setText("0");
+        jPanel2.add(workersram, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 210, -1, 30));
+
+        workersPS.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        workersPS.setText("0");
+        jPanel2.add(workersPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 250, -1, 30));
+
+        workersgc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        workersgc.setText("0");
+        jPanel2.add(workersgc, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, -1, 30));
+
+        workersAssembler.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        workersAssembler.setText("0");
+        jPanel2.add(workersAssembler, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, -1, 30));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void menosGPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosGPUActionPerformed
+        if (gpuWorkers > 1) {
+            gpuWorkers--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_menosGPUActionPerformed
 
-    private void masEnsambladorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masEnsambladorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_masEnsambladorActionPerformed
+    private void menosFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosFAActionPerformed
+        if (faWorkers > 1) {
+            faWorkers--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_menosFAActionPerformed
 
-    private void masPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masPMActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_masPMActionPerformed
+    private void menosRAMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosRAMActionPerformed
+        if (ramWorkers > 1) {
+            ramWorkers--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_menosRAMActionPerformed
 
-    private void masCPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masCPUActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_masCPUActionPerformed
+    private void menosCPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosCPUActionPerformed
+        if (cpuWorkers > 1) {
+            cpuWorkers--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_menosCPUActionPerformed
 
-    private void masRAMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masRAMActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_masRAMActionPerformed
-
-    private void masFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masFAActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_masFAActionPerformed
+    private void menosPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosPMActionPerformed
+        if (pm > 1) {
+            pm--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_menosPMActionPerformed
 
     private void masGPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masGPUActionPerformed
-        // TODO add your handling code here:
+        if (verificarAsignacion()) {
+            gpuWorkers++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
     }//GEN-LAST:event_masGPUActionPerformed
+
+    private void masFAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masFAActionPerformed
+        if (verificarAsignacion()) {
+            faWorkers++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_masFAActionPerformed
+
+    private void masRAMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masRAMActionPerformed
+        if (verificarAsignacion()) {
+            ramWorkers++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_masRAMActionPerformed
+
+    private void masCPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masCPUActionPerformed
+        if (verificarAsignacion()) {
+            cpuWorkers++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_masCPUActionPerformed
+
+    private void masPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masPMActionPerformed
+        if (verificarAsignacion()) {
+            pm++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_masPMActionPerformed
+
+    private void menosEnsambladorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menosEnsambladorActionPerformed
+        if (ensambladores > 1) {
+            ensambladores--;
+            totalAssignedWorkers--;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_menosEnsambladorActionPerformed
+
+    private void masEnsambladorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masEnsambladorActionPerformed
+        if (verificarAsignacion()) {
+            ensambladores++;
+            totalAssignedWorkers++;
+            actualizarLabels();
+        }
+    }//GEN-LAST:event_masEnsambladorActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+
+            if (totalAssignedWorkers == MAX_WORKERS) {
+                // Iniciar la simulación
+                // Solicitar los milisegundos
+                String milisegundosInput = javax.swing.JOptionPane.showInputDialog(this, "Por favor, ingrese un número de milisegundos (1000 milisegundos = 1 segundo):");
+                int milisegundos = Integer.parseInt(milisegundosInput);
+
+                // Solicitar el número de días
+                String diasInput = javax.swing.JOptionPane.showInputDialog(this, "Por favor, ingrese el número de días:");
+                int diastotales = Integer.parseInt(diasInput);
+
+                // Solicitar la DEATHLINE
+                String limiteInput = javax.swing.JOptionPane.showInputDialog(this, "Por favor, inserte la DEATHLINE en días:");
+                int limite = Integer.parseInt(limiteInput);
+
+                // Iniciar la simulación con los valores capturados
+                iniciarSimulacion(milisegundos, diastotales, limite);
+
+                System.out.println("Simulación iniciada con la siguiente asignación:");
+                System.out.println("Ensambladores: " + ensambladores);
+                System.out.println("Project Managers: " + pm);
+                System.out.println("Trabajadores CPU: " + cpuWorkers);
+                System.out.println("Trabajadores RAM: " + ramWorkers);
+                System.out.println("Trabajadores FA: " + faWorkers);
+                System.out.println("Trabajadores GPU: " + gpuWorkers);
+            } else {
+                System.out.println("Asegúrate de asignar un total de " + MAX_WORKERS + " trabajadores.");
+            }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, ingrese valores válidos.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -327,9 +576,25 @@ public class PantallaMSI extends javax.swing.JFrame {
             }
         });
     }
+    
+    
+    // Función para verificar si se pueden asignar más trabajadores
+    private boolean verificarAsignacion() {
+        return totalAssignedWorkers < MAX_WORKERS;
+    }
+    // Acciones para los botones de "+" y "-" de ensambladores
+
+    
+    private void actualizarLabels() {
+        workersAssembler.setText(String.valueOf(ensambladores));
+        workersMB.setText(String.valueOf(pm));
+        workerscpu.setText(String.valueOf(cpuWorkers));
+        workersram.setText(String.valueOf(ramWorkers));
+        workersPS.setText(String.valueOf(faWorkers));
+        workersgc.setText(String.valueOf(gpuWorkers));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Fondo;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -372,5 +637,11 @@ public class PantallaMSI extends javax.swing.JFrame {
     private javax.swing.JButton menosGPU;
     private javax.swing.JButton menosPM;
     private javax.swing.JButton menosRAM;
+    private javax.swing.JLabel workersAssembler;
+    private javax.swing.JLabel workersMB;
+    private javax.swing.JLabel workersPS;
+    private javax.swing.JLabel workerscpu;
+    private javax.swing.JLabel workersgc;
+    private javax.swing.JLabel workersram;
     // End of variables declaration//GEN-END:variables
 }

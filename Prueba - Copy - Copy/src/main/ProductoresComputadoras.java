@@ -6,6 +6,7 @@ package main;
 
 import DellTrabajadores.*;
 import GUI.PantallaDell;
+import GUI.PantallaMSI;
 
 import static java.lang.Thread.sleep;
 import java.util.Scanner;
@@ -33,6 +34,11 @@ public class ProductoresComputadoras {
         PantallaDell pantadell = new PantallaDell();
         pantadell.setVisible(true);
         pantadell.setLocationRelativeTo(null);
+        
+        PantallaMSI pantaMSI = new PantallaMSI();
+        pantaMSI.setVisible(true);
+        pantaMSI.setLocationRelativeTo(null);
+        
        /** Scanner input = new Scanner(System.in);
 
 

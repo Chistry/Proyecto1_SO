@@ -12,8 +12,7 @@ import DellTrabajadores.*;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+
 public class PantallaDell extends javax.swing.JFrame {
 
     
