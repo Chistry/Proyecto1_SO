@@ -9,7 +9,7 @@ package GUI;
  * @author diego
  */
 public class PantallaMSI extends javax.swing.JFrame {
-
+    private int contador = 0;
     /**
      * Creates new form Pantalla1
      */
@@ -28,8 +28,7 @@ public class PantallaMSI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        IniciarSimulacion = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -39,7 +38,7 @@ public class PantallaMSI extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        QtyEstandar = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -56,6 +55,28 @@ public class PantallaMSI extends javax.swing.JFrame {
         jLabel25 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        qtyEnsamblador = new javax.swing.JLabel();
+        qtyGananciasTotales = new javax.swing.JLabel();
+        qtyCPU = new javax.swing.JLabel();
+        qtyRAM = new javax.swing.JLabel();
+        qtyFA = new javax.swing.JLabel();
+        qtyGPU = new javax.swing.JLabel();
+        qtyPM = new javax.swing.JLabel();
+        Costor = new javax.swing.JLabel();
+        qtyConGPU1 = new javax.swing.JLabel();
+        qtyDescuentoProjectM = new javax.swing.JLabel();
+        qtyDiasRestantes2 = new javax.swing.JLabel();
+        qtyGPUs1 = new javax.swing.JLabel();
+        qtyFAs1 = new javax.swing.JLabel();
+        EstadoProjectManager = new javax.swing.JLabel();
+        qtyRAMs2 = new javax.swing.JLabel();
+        qtyPMs1 = new javax.swing.JLabel();
+        qtyCPUs1 = new javax.swing.JLabel();
+        EstadoDirector = new javax.swing.JLabel();
+        qtyAmonestacionesPM2 = new javax.swing.JLabel();
+        qtyestandar2 = new javax.swing.JLabel();
+        Ingresos = new javax.swing.JLabel();
         masEnsamblador = new javax.swing.JButton();
         menosEnsamblador = new javax.swing.JButton();
         masPM = new javax.swing.JButton();
@@ -68,7 +89,6 @@ public class PantallaMSI extends javax.swing.JFrame {
         menosRAM = new javax.swing.JButton();
         menosFA = new javax.swing.JButton();
         menosGPU = new javax.swing.JButton();
-        Fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -78,20 +98,17 @@ public class PantallaMSI extends javax.swing.JFrame {
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setText("MSI");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
-
-        jButton1.setText("Iniciar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        IniciarSimulacion.setText("Iniciar");
+        IniciarSimulacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                IniciarSimulacionActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
+        jPanel2.add(IniciarSimulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 40, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel2.setText("Trabajadores");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 110, 20));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 110, 20));
 
         jLabel3.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel3.setText("Computadoras producidas");
@@ -102,7 +119,7 @@ public class PantallaMSI extends javax.swing.JFrame {
         jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 70, 20));
 
         jLabel5.setText("Con GPU: ");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 280, 110, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 280, 60, 20));
 
         jLabel6.setText("Status:");
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 40, 40, -1));
@@ -113,18 +130,18 @@ public class PantallaMSI extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setText("CPU: ");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 110, 110, -1));
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 110, 40, -1));
 
         jLabel9.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel9.setText("Costos:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 410, 120, 20));
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 410, -1, 20));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel10.setText("GPU:");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, 110, -1));
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, 30, -1));
 
-        jLabel11.setText("Estándar: ");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 250, 110, -1));
+        QtyEstandar.setText("Estándar: ");
+        jPanel2.add(QtyEstandar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 250, 60, 20));
 
         jLabel12.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel12.setText("Project Manager");
@@ -132,17 +149,17 @@ public class PantallaMSI extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel13.setText("Ensamblador");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, -1, -1));
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, -1, -1));
 
         jLabel14.setText("Amonestaciones: ");
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, 110, -1));
+        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, -1, -1));
 
         jLabel15.setText("Descontado: ");
-        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 180, 110, -1));
+        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 180, 70, -1));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel16.setText("RAM: ");
-        jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 140, 110, -1));
+        jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 140, -1, -1));
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel17.setText("Fuente de Alimentación: ");
@@ -154,39 +171,125 @@ public class PantallaMSI extends javax.swing.JFrame {
 
         jLabel19.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel19.setText("Dias Restantes: ");
-        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 310, 180, 20));
+        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 310, -1, 20));
 
         jLabel20.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel20.setText("Ingresos:");
-        jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 370, 120, 20));
+        jPanel2.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 370, 70, 20));
 
         jLabel21.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel21.setText("Ganancias Totales:");
-        jPanel2.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 340, 180, 20));
+        jPanel2.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 340, 140, 20));
 
         jLabel22.setText("Estatus:");
         jPanel2.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 40, -1));
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel23.setText("Placa Madre");
-        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 80, -1));
+        jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 80, -1));
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel24.setText("CPU");
-        jPanel2.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, -1, -1));
+        jPanel2.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, -1, -1));
 
         jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel25.setText("RAM ");
-        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 210, -1, -1));
+        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, -1, -1));
 
         jLabel26.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel26.setText("Fuente Poder");
-        jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 90, 20));
+        jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 90, 20));
 
         jLabel27.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel27.setText("GPU");
-        jPanel2.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 290, -1, -1));
+        jPanel2.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 330, -1, -1));
+
+        jLabel1.setText("MSI");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
+
+        qtyEnsamblador.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyEnsamblador.setText("0");
+        jPanel2.add(qtyEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 370, -1, 30));
+
+        qtyGananciasTotales.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyGananciasTotales.setText("0");
+        jPanel2.add(qtyGananciasTotales, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 340, 20, 20));
+
+        qtyCPU.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyCPU.setText("0");
+        jPanel2.add(qtyCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 210, -1, 30));
+
+        qtyRAM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyRAM.setText("0");
+        jPanel2.add(qtyRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 250, -1, 30));
+
+        qtyFA.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyFA.setText("0");
+        jPanel2.add(qtyFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 290, -1, 30));
+
+        qtyGPU.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyGPU.setText("0");
+        jPanel2.add(qtyGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 330, -1, 30));
+
+        qtyPM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyPM.setText("0");
+        jPanel2.add(qtyPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 170, -1, 30));
+
+        Costor.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        Costor.setText("0");
+        jPanel2.add(Costor, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 410, -1, -1));
+
+        qtyConGPU1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyConGPU1.setText("0");
+        jPanel2.add(qtyConGPU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 280, 20, 20));
+
+        qtyDescuentoProjectM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyDescuentoProjectM.setText("0");
+        jPanel2.add(qtyDescuentoProjectM, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 180, 20, 20));
+
+        qtyDiasRestantes2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyDiasRestantes2.setText("0");
+        jPanel2.add(qtyDiasRestantes2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 310, 20, 20));
+
+        qtyGPUs1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyGPUs1.setText("0");
+        jPanel2.add(qtyGPUs1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 200, 20, 20));
+
+        qtyFAs1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyFAs1.setText("0");
+        jPanel2.add(qtyFAs1, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 170, 20, 20));
+
+        EstadoProjectManager.setText("Viendo Anime");
+        jPanel2.add(EstadoProjectManager, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 120, 100, 20));
+
+        qtyRAMs2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyRAMs2.setText("0");
+        jPanel2.add(qtyRAMs2, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 140, 20, 20));
+
+        qtyPMs1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyPMs1.setText("0");
+        jPanel2.add(qtyPMs1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 80, 20, 20));
+
+        qtyCPUs1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyCPUs1.setText("0");
+        jPanel2.add(qtyCPUs1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 110, 20, 20));
+
+        EstadoDirector.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        EstadoDirector.setText("0");
+        jPanel2.add(EstadoDirector, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 40, 20, 20));
+
+        qtyAmonestacionesPM2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyAmonestacionesPM2.setText("0");
+        jPanel2.add(qtyAmonestacionesPM2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 150, 20, 20));
+
+        qtyestandar2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        qtyestandar2.setText("0");
+        jPanel2.add(qtyestandar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 250, -1, -1));
+
+        Ingresos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        Ingresos.setText("0");
+        jPanel2.add(Ingresos, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 370, -1, -1));
 
         masEnsamblador.setText("+");
         masEnsamblador.addActionListener(new java.awt.event.ActionListener() {
@@ -194,18 +297,23 @@ public class PantallaMSI extends javax.swing.JFrame {
                 masEnsambladorActionPerformed(evt);
             }
         });
-        jPanel2.add(masEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 30, 30));
+        jPanel2.add(masEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 370, 50, 30));
 
         menosEnsamblador.setText("-");
-        jPanel2.add(menosEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 330, 30, 30));
+        jPanel2.add(menosEnsamblador, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 370, 50, 30));
 
         masPM.setText("+");
+        masPM.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                masPMMouseClicked(evt);
+            }
+        });
         masPM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 masPMActionPerformed(evt);
             }
         });
-        jPanel2.add(masPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 130, 30, 30));
+        jPanel2.add(masPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, 50, 30));
 
         masCPU.setText("+");
         masCPU.addActionListener(new java.awt.event.ActionListener() {
@@ -213,7 +321,7 @@ public class PantallaMSI extends javax.swing.JFrame {
                 masCPUActionPerformed(evt);
             }
         });
-        jPanel2.add(masCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, 30, 30));
+        jPanel2.add(masCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, 50, 30));
 
         masRAM.setText("+");
         masRAM.addActionListener(new java.awt.event.ActionListener() {
@@ -221,7 +329,7 @@ public class PantallaMSI extends javax.swing.JFrame {
                 masRAMActionPerformed(evt);
             }
         });
-        jPanel2.add(masRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, 30, 30));
+        jPanel2.add(masRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 250, 50, 30));
 
         masFA.setText("+");
         masFA.addActionListener(new java.awt.event.ActionListener() {
@@ -229,7 +337,7 @@ public class PantallaMSI extends javax.swing.JFrame {
                 masFAActionPerformed(evt);
             }
         });
-        jPanel2.add(masFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 250, 30, 30));
+        jPanel2.add(masFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 290, 50, 30));
 
         masGPU.setText("+");
         masGPU.addActionListener(new java.awt.event.ActionListener() {
@@ -237,38 +345,47 @@ public class PantallaMSI extends javax.swing.JFrame {
                 masGPUActionPerformed(evt);
             }
         });
-        jPanel2.add(masGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 290, 30, 30));
+        jPanel2.add(masGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 50, 30));
 
         menosPM.setText("-");
-        jPanel2.add(menosPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, 30, 30));
+        menosPM.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menosPMMouseClicked(evt);
+            }
+        });
+        jPanel2.add(menosPM, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 170, 50, 30));
 
         menosCPU.setText("-");
-        jPanel2.add(menosCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 30, 30));
+        jPanel2.add(menosCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 210, 50, 30));
 
         menosRAM.setText("-");
-        jPanel2.add(menosRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 30, 30));
+        jPanel2.add(menosRAM, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 250, 50, 30));
 
         menosFA.setText("-");
-        jPanel2.add(menosFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 250, 30, 30));
+        jPanel2.add(menosFA, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 290, 50, 30));
 
         menosGPU.setText("-");
-        jPanel2.add(menosGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 290, 30, 30));
-
-        Fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/WhatsApp Image 2024-10-10 at 10.37.19 AM.jpeg"))); // NOI18N
-        jPanel2.add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
+        jPanel2.add(menosGPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 330, 50, 30));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void IniciarSimulacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarSimulacionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_IniciarSimulacionActionPerformed
 
     private void masEnsambladorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masEnsambladorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_masEnsambladorActionPerformed
+
+    private void masPMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_masPMMouseClicked
+
+        contador ++;
+        String numero= Integer.toString(contador);
+        qtyPM.setText(numero);
+    }//GEN-LAST:event_masPMMouseClicked
 
     private void masPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masPMActionPerformed
         // TODO add your handling code here:
@@ -289,6 +406,16 @@ public class PantallaMSI extends javax.swing.JFrame {
     private void masGPUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masGPUActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_masGPUActionPerformed
+
+    private void menosPMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menosPMMouseClicked
+        if (contador >0){
+            contador --;
+            String numero= Integer.toString(contador);
+            qtyPM.setText(numero);
+        }else{
+
+        }
+    }//GEN-LAST:event_menosPMMouseClicked
 
     /**
      * @param args the command line arguments
@@ -329,11 +456,14 @@ public class PantallaMSI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Fondo;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel Costor;
+    private javax.swing.JLabel EstadoDirector;
+    private javax.swing.JLabel EstadoProjectManager;
+    private javax.swing.JLabel Ingresos;
+    private javax.swing.JButton IniciarSimulacion;
+    private javax.swing.JLabel QtyEstandar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -372,5 +502,22 @@ public class PantallaMSI extends javax.swing.JFrame {
     private javax.swing.JButton menosGPU;
     private javax.swing.JButton menosPM;
     private javax.swing.JButton menosRAM;
+    private javax.swing.JLabel qtyAmonestacionesPM2;
+    private javax.swing.JLabel qtyCPU;
+    private javax.swing.JLabel qtyCPUs1;
+    private javax.swing.JLabel qtyConGPU1;
+    private javax.swing.JLabel qtyDescuentoProjectM;
+    private javax.swing.JLabel qtyDiasRestantes2;
+    private javax.swing.JLabel qtyEnsamblador;
+    private javax.swing.JLabel qtyFA;
+    private javax.swing.JLabel qtyFAs1;
+    private javax.swing.JLabel qtyGPU;
+    private javax.swing.JLabel qtyGPUs1;
+    private javax.swing.JLabel qtyGananciasTotales;
+    private javax.swing.JLabel qtyPM;
+    private javax.swing.JLabel qtyPMs1;
+    private javax.swing.JLabel qtyRAM;
+    private javax.swing.JLabel qtyRAMs2;
+    private javax.swing.JLabel qtyestandar2;
     // End of variables declaration//GEN-END:variables
 }
