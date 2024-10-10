@@ -6,7 +6,9 @@ package main;
 
 
 import MSIemployees.*;
-import static java.lang.Thread.sleep;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
@@ -23,7 +25,32 @@ public class ProductoresComputadoras {
     
     /**
      */
-    
+    public static void guardarParametros(double segundos, int deathline, int n) {
+        File file = new File("parametros.txt");
+
+        try {
+            // Crear el archivo si no existe
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            // Usar FileWriter para escribir en el archivo
+            FileWriter writer = new FileWriter(file, true); // 'true' para agregar sin sobrescribir
+
+            writer.write("Segundos: " + segundos + "\n");
+            writer.write("Deathline: " + deathline + "\n");
+            writer.write("N: " + n + "\n");
+            writer.write("-------------------------\n");
+
+            writer.close();
+
+            System.out.println("Parámetros guardados en parametros.txt");
+
+        } catch (IOException e) {
+            System.out.println("Ocurrió un error al guardar los parámetros.");
+            e.printStackTrace();
+        }
+    }
     
     
     public static void main(String[] args) {
@@ -47,6 +74,8 @@ public class ProductoresComputadoras {
         System.out.println("DEATHLINE en "+ deathline +" dias.");
 
         input.close();
+        
+        int n = 0;
         
         
         
@@ -99,7 +128,7 @@ public class ProductoresComputadoras {
         System.out.println("\n\nGanancia Bruta: "+gananciaBruta+"\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: "+UtilidadEstudio);
         
         
-        
+        guardarParametros(segundos, deathline, n);
         
         
     }
