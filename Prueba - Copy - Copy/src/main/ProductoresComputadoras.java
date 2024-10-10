@@ -4,8 +4,9 @@
  */
 package main;
 
+import DellTrabajadores.*;
+import GUI.PantallaDell;
 
-import MSIemployees.*;
 import static java.lang.Thread.sleep;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author chris
  */
-public class ProductoresComputadoras {
+public class ProductoresComputadoras {       
     private int dias=0;
     private int contador;
     
@@ -27,7 +28,12 @@ public class ProductoresComputadoras {
     
     
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+        
+           
+        PantallaDell pantadell = new PantallaDell();
+        pantadell.setVisible(true);
+        pantadell.setLocationRelativeTo(null);
+       /** Scanner input = new Scanner(System.in);
 
 
         System.out.println("Por favor, ingrese un número de milisegundos:");
@@ -39,12 +45,12 @@ public class ProductoresComputadoras {
         System.out.println(milisegundos + " milisegundos son " + segundos + " segundos.");
 
         System.out.println("Por favor, ingrese el número de días:");
-        int totalDays = input.nextInt();
-        System.out.println("Numero de dias ingresados: " + totalDays);
+        int diastotales = input.nextInt();
+        System.out.println("Numero de dias ingresados: " + diastotales);
         
         System.out.println("Por favor, inserte la DEATHLINE: ");
-        int deathline = input.nextInt();
-        System.out.println("DEATHLINE en "+ deathline +" dias.");
+        int limite = input.nextInt();
+        System.out.println("DEATHLINE en "+ limite +" dias.");
 
         input.close();
         
@@ -52,16 +58,16 @@ public class ProductoresComputadoras {
         
         Semaphore mutex = new Semaphore(1);
         
-        Worker trab1 = new MBproducer(mutex, milisegundos, totalDays);
-        Worker trab2 = new CPUproducer(mutex, milisegundos,totalDays);
-        Worker trab3 = new RAMproducer(mutex, milisegundos,totalDays);
-        Worker trab4 = new PSproducer(mutex, milisegundos,totalDays);
-        Worker trab5 = new GCproducer(mutex, milisegundos, totalDays);
-        Assembler trab6 = new Assembler(mutex, trab1, trab2,trab3,trab4,trab5, milisegundos, totalDays);
+        Trabajador trab1 = new PBtrabajador(mutex, milisegundos, diastotales);
+        Trabajador trab2 = new CPUtrabajador(mutex, milisegundos,diastotales);
+        Trabajador trab3 = new RAMtrabajador(mutex, milisegundos,diastotales);
+        Trabajador trab4 = new FAtrabajador(mutex, milisegundos,diastotales);
+        Trabajador trab5 = new GPUtrabajador(mutex, milisegundos, diastotales);
+        Ensamblador trab6 = new Ensamblador(mutex, trab1, trab2,trab3,trab4,trab5, milisegundos, diastotales);
         
         
-        ProjectManager trab7 = new ProjectManager(mutex, milisegundos, deathline, totalDays);
-        Director trab8 = new Director(mutex, milisegundos, trab7, trab6 ,totalDays);
+        ProjectManager trab7 = new ProjectManager(mutex, milisegundos, limite, diastotales);
+        Director trab8 = new Director(mutex, milisegundos, trab7, trab6 ,diastotales);
         
         
         
@@ -76,7 +82,7 @@ public class ProductoresComputadoras {
         trab7.start();
         trab8.start();
         
-        trab1.timeCounter(totalDays);
+        trab1.contadorTiempo(diastotales);
         
         try {
             // Esperar que todos los hilos terminen
@@ -93,12 +99,12 @@ public class ProductoresComputadoras {
         }
 
         int gananciaBruta= trab8.getVentas();
-        int costosOperativos=trab1.getTotalsalary()+trab2.getTotalsalary()+trab3.getTotalsalary()+trab4.getTotalsalary()+trab5.getTotalsalary()+trab6.getTotalsalary()+trab7.getTotalsalary()+trab8.getTotalsalary();
+        int costosOperativos=trab1.getSalariototal()+trab2.getSalariototal()+trab3.getSalariototal()+trab4.getSalariototal()+trab5.getSalariototal()+trab6.getSalariototal()+trab7.getSalariototal()+trab8.getSalariototal();
         int UtilidadEstudio= gananciaBruta-costosOperativos;
 
         System.out.println("\n\nGanancia Bruta: "+gananciaBruta+"\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: "+UtilidadEstudio);
         
-        
+        */
         
         
         

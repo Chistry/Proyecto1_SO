@@ -87,7 +87,6 @@ public class ProjectManager extends Thread {
                 anime = true;  // Valor inicial del booleano
                 for (int i = 0; i < 32; i++) {
                     
-
                     sleep(tiempoProduArti/48);
 
                     anime = !anime;  // Alterna el valor entre true y false
