@@ -181,7 +181,7 @@ public class Ensamblador extends Thread{
                 }
 
                 // Si el contador alcanza 6, intentamos ensamblar con tarjeta gráfica
-                if (contador >= 6) {
+                if (contador >= 3) {
                     boolean canAssembleWithGraphics = true;
 
                     // Verificar si todas las listas de trabajadores tienen producción suficiente, incluyendo las tarjetas gráficas
