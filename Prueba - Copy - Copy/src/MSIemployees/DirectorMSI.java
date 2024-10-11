@@ -30,6 +30,16 @@ public class DirectorMSI extends Thread {
     private ListaSimple<Assembler> Assemblers; // Lista de ensambladores
     private int iteraciones;
     private int ventas = 0;
+    private int amonestaciones = 0; // Amonestaciones acumuladas
+    private int dineroPerdido = 0;
+    
+    public int getAmonestaciones() {
+        return amonestaciones;
+    }
+
+    public int getDineroPerdido() {
+        return dineroPerdido;
+    }
 
     public int getTotalsalary() {
         return totalsalary;
@@ -55,6 +65,11 @@ public class DirectorMSI extends Thread {
         this.deathlineDirector = deathlineDirector;
     }
 
+    private void amonestar() {
+        amonestaciones++;
+        dineroPerdido += 100; // Por ejemplo, cada amonestación cuesta 100$
+    }
+    
     public DirectorMSI(Semaphore mutex, int ArtificialProductionTime, ProjectManagerMSI ProjectManager,
                         ListaSimple<Assembler> listaassembler, int iteraciones) {
         this.mutex = mutex;
@@ -112,6 +127,7 @@ public class DirectorMSI extends Thread {
                         // Verificar si el Project Manager está viendo anime
                         if (ProjectManager.isAnime()) {
                             System.out.println("El Project Manager está viendo anime durante el descanso.");
+                            amonestar();
                             ProjectManager.setTotalsalary(ProjectManager.getTotalsalary() - 100);
                         } else {
                             System.out.println("El Project Manager no está viendo anime.");

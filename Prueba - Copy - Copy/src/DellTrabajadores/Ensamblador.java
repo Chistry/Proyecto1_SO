@@ -112,7 +112,7 @@ public class Ensamblador extends Thread{
         int contadorIte = 0;
         while(contadorIte != this.iteraciones){
             try{
-                if (contador<6){
+                if (contador<3){
                     if(PBtrabajador.getProduccion() >= 2 && CPUtrabajador.getProduccion() >= 3 && RAMtrabajador.getProduccion()>=4 && FAtrabajador.getProduccion()>=6){
                         this.mutex.release();
                         

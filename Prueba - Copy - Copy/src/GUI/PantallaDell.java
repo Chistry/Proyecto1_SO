@@ -9,6 +9,9 @@ package GUI;
  * @author diego
  */
 import DellTrabajadores.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +33,9 @@ public class PantallaDell extends javax.swing.JFrame {
         initComponents();
         actualizarLabels();
     }
+    
+    
+
     
     private void iniciarSimulacion(int milisegundos, int diastotales, int limite) {
         Semaphore mutex = new Semaphore(1);
@@ -477,7 +483,41 @@ public class PantallaDell extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    public static void guardarParametros(double segundos, int deathline, int ensamblador, int mb, int cpu, int ram, int ps, int gc) {
+        File file = new File("parametros.txt");
 
+        try {
+            // Crear el archivo si no existe
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            // Usar FileWriter para escribir en el archivo
+            FileWriter writer = new FileWriter(file, true); // 'true' para agregar sin sobrescribir
+            writer.write("DELL:"+"\n");
+            writer.write("Segundos: " + segundos + "\n");
+            writer.write("Deathline: " + deathline + "\n");
+            writer.write("Trabajadores MB: " + mb + "\n");
+            writer.write("Trabajadores CPU: " + cpu + "\n");
+            writer.write("Trabajadores RAM: " + ram + "\n");
+            writer.write("Trabajadores fuente de alimentacion: " + ps + "\n");
+            writer.write("Trabajadores tarjeta graficas: " + gc + "\n");
+            writer.write("Ensamblador: " + ensamblador + "\n");
+            
+            
+            writer.write("-------------------------\n");
+
+            writer.close();
+
+            System.out.println("Parámetros guardados en parametros.txt");
+
+        } catch (IOException e) {
+            System.out.println("Ocurrió un error al guardar los parámetros.");
+            e.printStackTrace();
+        }
+    }
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             
@@ -486,6 +526,7 @@ public class PantallaDell extends javax.swing.JFrame {
                 // Solicitar los milisegundos
                 String milisegundosInput = javax.swing.JOptionPane.showInputDialog(this, "Por favor, ingrese un número de milisegundos (1000 milisegundos = 1 segundo):");
                 int milisegundos = Integer.parseInt(milisegundosInput);
+                int segundos = milisegundos/1000;
 
                 // Solicitar el número de días
                 String diasInput = javax.swing.JOptionPane.showInputDialog(this, "Por favor, ingrese el número de días:");
@@ -505,6 +546,8 @@ public class PantallaDell extends javax.swing.JFrame {
                 System.out.println("Trabajadores RAM: " + ramWorkers);
                 System.out.println("Trabajadores FA: " + faWorkers);
                 System.out.println("Trabajadores GPU: " + gpuWorkers);
+                guardarParametros(segundos, limite, ensambladores, pm, cpuWorkers, ramWorkers, faWorkers, gpuWorkers);
+                
             } else {
                 System.out.println("Asegúrate de asignar un total de " + MAX_WORKERS + " trabajadores.");
             }
