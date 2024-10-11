@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package respaldo;
+/*package respaldo;
 import static java.lang.Thread.sleep;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 /**
  *
  * @author diego
- */
+ 
 public class Director extends Thread {
     private String nombre= "Director: ";
     private int salario=60;
@@ -31,42 +31,42 @@ public class Director extends Thread {
 
     /**
      * @return the salariototal
-     */
+     
     public int getSalariototal() {
         return salariototal;
     }
 
     /**
      * @param salariototal the salariototal to set
-     */
+     
     public void setSalariototal(int salariototal) {
         this.salariototal = salariototal;
     }
 
     /**
      * @return the limiteDirector
-     */
+     
     public int getLimiteDirector() {
         return limiteDirector;
     }
 
     /**
      * @param limiteDirector the limiteDirector to set
-     */
+     
     public void setLimiteDirector(int limiteDirector) {
         this.limiteDirector = limiteDirector;
     }
 
     /**
      * @return the ventas
-     */
+     
     public int getVentas() {
         return ventas;
     }
 
     /**
      * @param ventas the ventas to set
-     */
+     
     public void setVentas(int ventas) {
         this.ventas = ventas;
     }
@@ -127,7 +127,7 @@ public void run() {
                     mutex.release();
                 }
             } else {
-                // Descanso aleatorio del director
+                //Descanso aleatorio del director
                 if (randomMoment < tiempoProduArti) {
                     System.out.println("Director tomando un descanso de 35 minutos...");
                     sleep((long) DuracionEspia);
@@ -153,4 +153,4 @@ public void run() {
     }
 }
     
-}
+}*/

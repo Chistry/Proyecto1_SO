@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package respaldo;
+/*package respaldo;
 
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 /**
  *
  * @author diego
- */
+ 
 public class Ensamblador extends Thread{
     private String nombre = "Ensamblador: ";
     private int salario = 50;
@@ -33,56 +33,56 @@ public class Ensamblador extends Thread{
 
     /**
      * @return the produccion
-     */
+     
     public int getProduccion() {
         return produccion;
     }
 
     /**
      * @param produccion the produccion to set
-     */
+     
     public void setProduccion(int produccion) {
         this.produccion = produccion;
     }
 
     /**
      * @return the produccionGPU
-     */
+     
     public int getProduccionGPU() {
         return produccionGPU;
     }
 
     /**
      * @param produccionGPU the produccionGPU to set
-     */
+     
     public void setProduccionGPU(int produccionGPU) {
         this.produccionGPU = produccionGPU;
     }
 
     /**
      * @return the mutex
-     */
+     
     public Semaphore getMutex() {
         return mutex;
     }
 
     /**
      * @param mutex the mutex to set
-     */
+     
     public void setMutex(Semaphore mutex) {
         this.mutex = mutex;
     }
 
     /**
      * @return the salariototal
-     */
+     
     public int getSalariototal() {
         return salariototal;
     }
 
     /**
      * @param salariototal the salariototal to set
-     */
+     
     public void setSalariototal(int salariototal) {
         this.salariototal = salariototal;
     }
@@ -159,4 +159,4 @@ public class Ensamblador extends Thread{
             }
         
     }
-}
+}*/

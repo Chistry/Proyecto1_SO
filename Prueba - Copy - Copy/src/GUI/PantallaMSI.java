@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import EDD.ListaSimple;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +12,8 @@ import MSIemployees.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.Semaphore;
+import EDD.ListaSimple;
+
 
 /**
  *
@@ -28,6 +31,15 @@ public class PantallaMSI extends javax.swing.JFrame {
     private int gpuWorkers = 1;
     private final int MAX_WORKERS = 16;
     private int totalAssignedWorkers = ensambladores + pm + cpuWorkers + ramWorkers + faWorkers + gpuWorkers;
+    
+    private ListaSimple<Worker> workersListMB = new ListaSimple<>();
+    private ListaSimple<Worker> workersListCPU = new ListaSimple<>();
+    private ListaSimple<Worker> workersListRAM = new ListaSimple<>();
+    private ListaSimple<Worker> workersListPS = new ListaSimple<>();
+    private ListaSimple<Worker> workersListGC = new ListaSimple<>();
+
+    
+    private ListaSimple<Assembler> assemblersList = new ListaSimple<>();
     
     public PantallaMSI() {
         initComponents();
@@ -61,47 +73,93 @@ public class PantallaMSI extends javax.swing.JFrame {
         }
     }
     
+    private int calcularCostosOperativos(ProjectManagerMSI projectmanager, DirectorMSI director) {
+        int totalSalarios = 0;
+
+        // Sumar salarios de cada tipo de trabajador
+        for (Worker worker : workersListMB) {
+            totalSalarios += worker.getTotalsalary();
+        }
+        for (Worker worker : workersListCPU) {
+            totalSalarios += worker.getTotalsalary();
+        }
+        for (Worker worker : workersListRAM) {
+            totalSalarios += worker.getTotalsalary();
+        }
+        for (Worker worker : workersListPS) {
+            totalSalarios += worker.getTotalsalary();
+        }
+        for (Worker worker : workersListGC) {
+            totalSalarios += worker.getTotalsalary();
+        }
+
+        // Sumar salarios del Project Manager y el Director
+        totalSalarios += projectmanager.getTotalsalary(); // Asegúrate de que tengas un método getSalary en ProjectManager
+        totalSalarios += director.getTotalsalary(); // Asegúrate de que tengas un método getSalary en Director
+
+        return totalSalarios;
+    }
+
+
+    
     
     private void iniciarSimulacion(int milisegundos, int diastotales, int limite) {
         Semaphore mutex = new Semaphore(1);
         
-        Worker trab1 = new MBproducer(mutex, milisegundos, diastotales);
-        Worker trab2 = new CPUproducer(mutex, milisegundos, diastotales);
-        Worker trab3 = new RAMproducer(mutex, milisegundos, diastotales);
-        Worker trab4 = new PSproducer(mutex, milisegundos, diastotales);
-        Worker trab5 = new GCproducer(mutex, milisegundos, diastotales);
-        Assembler trab6 = new Assembler(mutex, trab1, trab2, trab3, trab4, trab5, milisegundos, diastotales);
-        
-        ProjectManagerMSI trab7 = new ProjectManagerMSI(mutex, milisegundos, limite, diastotales);
-        DirectorMSI trab8 = new DirectorMSI(mutex, milisegundos, trab7, trab6, diastotales);
+            
 
-        // Iniciar los threads
-        trab1.start();
-        trab2.start();
-        trab3.start();
-        trab4.start();
-        trab5.start();
-        trab6.start();
-        trab7.start();
-        trab8.start();
+        // Crear los productores dinámicamente según la asignación del usuario
+        for (int i = 0; i < pm; i++) {
+            Worker mbWorker = new MBproducer(mutex, milisegundos, diastotales);
+            workersListMB.insertar(mbWorker);
+            mbWorker.start();
+        }
+        for (int i = 0; i < cpuWorkers; i++) {
+            Worker cpuWorker = new CPUproducer(mutex, milisegundos, diastotales);
+            workersListCPU.insertar(cpuWorker);
+            cpuWorker.start();
+        }
+        for (int i = 0; i < ramWorkers; i++) {
+            Worker ramWorker = new RAMproducer(mutex, milisegundos, diastotales);
+            workersListRAM.insertar(ramWorker);
+            ramWorker.start();
+        }
+        for (int i = 0; i < faWorkers; i++) {
+            Worker psWorker = new PSproducer(mutex, milisegundos, diastotales);
+            workersListPS.insertar(psWorker);
+            psWorker.start();
+        }
+        for (int i = 0; i < gpuWorkers; i++) {
+            Worker gcWorker = new GCproducer(mutex, milisegundos, diastotales);
+            workersListGC.insertar(gcWorker);
+            gcWorker.start();
+        }
+        
+
+        // Crear ensambladores dinámicamente
+        for (int i = 0; i < ensambladores; i++) {
+            
+            Assembler assembler = new Assembler(mutex, workersListMB,workersListCPU,workersListRAM,workersListPS,workersListGC, milisegundos, diastotales);
+            assemblersList.insertar(assembler);
+            assembler.start();
+        }
+
+        // Iniciar el Project Manager y Director
+        ProjectManagerMSI projectmanager = new ProjectManagerMSI(mutex, milisegundos, limite, diastotales);
+        DirectorMSI director = new DirectorMSI(mutex, milisegundos, projectmanager, assemblersList, diastotales);
+
+        projectmanager.start();
+        director.start();
 
         try {
-            // Esperar que todos los hilos terminen
-            trab1.join();
-            trab2.join();
-            trab3.join();
-            trab4.join();
-            trab5.join();
-            trab6.join();
-            trab7.join();
-            trab8.join();
-        } catch (InterruptedException e) {
-            Logger.getLogger(PantallaDell.class.getName()).log(Level.SEVERE, null, e);
+            director.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PantallaMSI.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         // Calcular la ganancia y mostrar los resultados
-        int gananciaBruta = trab8.getVentas();
-        int costosOperativos = trab1.getTotalsalary() + trab2.getTotalsalary() + trab3.getTotalsalary() + trab4.getTotalsalary() + trab5.getTotalsalary() + trab6.getTotalsalary() + trab7.getTotalsalary() + trab8.getTotalsalary();
+        int gananciaBruta = director.getVentas();
+        int costosOperativos = calcularCostosOperativos(projectmanager, director);
         int UtilidadEstudio = gananciaBruta - costosOperativos;
         bruto.setText(String.valueOf(gananciaBruta)+"$");
         costos.setText(String.valueOf(costosOperativos)+"$");
@@ -548,7 +606,7 @@ public class PantallaMSI extends javax.swing.JFrame {
 
                 System.out.println("Simulación iniciada con la siguiente asignación:");
                 System.out.println("Ensambladores: " + ensambladores);
-                System.out.println("Project Managers: " + pm);
+                System.out.println("Trabajadores MotherBoard: " + pm);
                 System.out.println("Trabajadores CPU: " + cpuWorkers);
                 System.out.println("Trabajadores RAM: " + ramWorkers);
                 System.out.println("Trabajadores FA: " + faWorkers);
