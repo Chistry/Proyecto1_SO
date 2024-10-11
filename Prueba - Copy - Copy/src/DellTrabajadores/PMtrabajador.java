@@ -10,8 +10,8 @@ import java.util.concurrent.Semaphore;
  *
  * @author diego
  */
-public class PBtrabajador extends Trabajador{
-    public PBtrabajador(Semaphore mutex, int ArtificialTime, int iteraciones){
+public class PMtrabajador extends Trabajador{
+    public PMtrabajador(Semaphore mutex, int ArtificialTime, int iteraciones){
         super("Trabajador Placa Base: ", mutex, 3*ArtificialTime, 72, 20, 25, 1, ArtificialTime, iteraciones);
     
     }

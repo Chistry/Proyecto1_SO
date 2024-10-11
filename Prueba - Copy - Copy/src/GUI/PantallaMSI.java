@@ -4,7 +4,6 @@
  */
 package GUI;
 
-import EDD.ListaSimple;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -164,7 +163,8 @@ public class PantallaMSI extends javax.swing.JFrame {
         } catch (InterruptedException ex) {
             Logger.getLogger(PantallaMSI.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
+        
         // Calcular la ganancia y mostrar los resultados
         int gananciaBruta = director.getVentas();
         int costosOperativos = calcularCostosOperativos(projectmanager, director);
@@ -173,8 +173,10 @@ public class PantallaMSI extends javax.swing.JFrame {
         costos.setText(String.valueOf(costosOperativos)+"$");
         ganaciasTotales.setText(String.valueOf(UtilidadEstudio)+"$");
         //javax.swing.JOptionPane.showMessageDialog(this, "Ganancia Bruta: " + gananciaBruta + "\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: " + UtilidadEstudio);
-        
-    }
+
+            
+        } 
+
 
     /**
      * This method is called from within the constructor to initialize the form.
