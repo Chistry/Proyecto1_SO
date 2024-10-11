@@ -13,9 +13,10 @@ import EDD.ListaSimple;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.concurrent.Semaphore;
+import EDD.ListaSimple;
 
 public class PantallaDell extends javax.swing.JFrame {
 
@@ -28,6 +29,7 @@ public class PantallaDell extends javax.swing.JFrame {
     private int gpuWorkers = 1;
     private final int MAX_WORKERS = 16;
     private int totalAssignedWorkers = ensambladores + pm + cpuWorkers + ramWorkers + faWorkers + gpuWorkers;
+
     private ListaSimple<Trabajador> PMlistaTrabajadores = new ListaSimple<>();
     private ListaSimple<Trabajador> CPUlistaTrabajadores = new ListaSimple<>();
     private ListaSimple<Trabajador> RAMlistaTrabajadores = new ListaSimple<>();
@@ -35,20 +37,79 @@ public class PantallaDell extends javax.swing.JFrame {
     private ListaSimple<Trabajador> GPUlistaTrabajadores = new ListaSimple<>();
     private ListaSimple<Ensamblador> listaEnsamblador = new ListaSimple<>();
 
+
+    
+
+
     public PantallaDell() {
         initComponents();
         actualizarLabels();
     }
     
-    
 
+    public static void guardarParametros(double segundos, int deathline, int n) {
+        File file = new File("parametros.txt");
+
+
+        try {
+            // Crear el archivo si no existe
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            // Usar FileWriter para escribir en el archivo
+            FileWriter writer = new FileWriter(file, true); // 'true' para agregar sin sobrescribir
+
+            writer.write("Segundos: " + segundos + "\n");
+            writer.write("Deathline: " + deathline + "\n");
+            writer.write("N: " + n + "\n");
+            writer.write("-------------------------\n");
+
+            writer.close();
+
+            System.out.println("Parámetros guardados en parametros.txt");
+
+        } catch (IOException e) {
+            System.out.println("Ocurrió un error al guardar los parámetros.");
+            e.printStackTrace();
+        }
+    }
+    
+    private int calcularCostosOperativos(ProjectManager projectmanager, Director director) {
+        int totalSalarios = 0;
+
+        // Sumar salarios de cada tipo de trabajador
+        for (Trabajador trabajador : PMlistaTrabajadores) {
+            totalSalarios += trabajador.getSalariototal();
+        }
+        for (Trabajador trabajador : CPUlistaTrabajadores) {
+            totalSalarios += trabajador.getSalariototal();
+        }
+        for (Trabajador trabajador : RAMlistaTrabajadores) {
+            totalSalarios += trabajador.getSalariototal();
+        }
+        for (Trabajador trabajador : FAlistaTrabajadores) {
+            totalSalarios += trabajador.getSalariototal();
+        }
+        for (Trabajador trabajador : GPUlistaTrabajadores) {
+            totalSalarios += trabajador.getSalariototal();
+        }
+
+        // Sumar salarios del Project Manager y el Director
+        totalSalarios += projectmanager.getSalariototal(); // Asegúrate de que tengas un método getSalary en ProjectManager
+        totalSalarios += director.getSalariototal(); // Asegúrate de que tengas un método getSalary en Director
+
+        return totalSalarios;
+    }
     
     private void iniciarSimulacion(int milisegundos, int diastotales, int limite) {
             Semaphore mutex = new Semaphore(1);
             
             // Crear los productores dinámicamente según la asignación del usuario
         for (int i = 0; i < pm; i++) {
+
             Trabajador mbWorker = new PBtrabajador(mutex, milisegundos, diastotales);
+
             PMlistaTrabajadores.insertar(mbWorker);
             mbWorker.start();
         }
@@ -97,11 +158,12 @@ public class PantallaDell extends javax.swing.JFrame {
         int costosOperativos = calcularCostosOperativos(projectmanager, director);
         int UtilidadEstudio = gananciaBruta - costosOperativos;
         Ingresos.setText(String.valueOf(gananciaBruta)+"$");
-        Costor.setText(String.valueOf(costosOperativos)+"$");
+        Costos.setText(String.valueOf(costosOperativos)+"$");
         GananciasTotales.setText(String.valueOf(UtilidadEstudio)+"$");
         //javax.swing.JOptionPane.showMessageDialog(this, "Ganancia Bruta: " + gananciaBruta + "\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: " + UtilidadEstudio);
         
         }
+
     
     private int calcularCostosOperativos(ProjectManager projectmanager, Director director) {
         int totalSalarios = 0;
@@ -129,6 +191,7 @@ public class PantallaDell extends javax.swing.JFrame {
 
         return totalSalarios;
     }
+
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -226,7 +289,7 @@ public class PantallaDell extends javax.swing.JFrame {
         qtyDiasRestantes2 = new javax.swing.JLabel();
         GananciasTotales = new javax.swing.JLabel();
         Ingresos = new javax.swing.JLabel();
-        Costor = new javax.swing.JLabel();
+        Costos = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -320,7 +383,7 @@ public class PantallaDell extends javax.swing.JFrame {
 
         jLabel21.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel21.setText("Ganancias Totales:");
-        jPanel2.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 340, 120, 20));
+        jPanel2.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 340, 150, 20));
 
         jLabel22.setText("Estatus:");
         jPanel2.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 40, -1));
@@ -521,9 +584,9 @@ public class PantallaDell extends javax.swing.JFrame {
         Ingresos.setText("0");
         jPanel2.add(Ingresos, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 370, 110, -1));
 
-        Costor.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        Costor.setText("0");
-        jPanel2.add(Costor, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 410, 100, -1));
+        Costos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        Costos.setText("0");
+        jPanel2.add(Costos, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 410, 100, -1));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
 
@@ -707,7 +770,7 @@ public class PantallaDell extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Costor;
+    private javax.swing.JLabel Costos;
     private javax.swing.JLabel EstadoDirector;
     private javax.swing.JLabel EstadoProjectManager;
     private javax.swing.JLabel GananciasTotales;
