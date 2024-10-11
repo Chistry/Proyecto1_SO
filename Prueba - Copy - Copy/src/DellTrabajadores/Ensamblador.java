@@ -4,6 +4,7 @@
  */
 package DellTrabajadores;
 
+import EDD.ListaSimple;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,13 +24,18 @@ public class Ensamblador extends Thread{
     private Semaphore mutex;
     private int salariototal = 0;
     private int numunidades = 1;
-    private Trabajador PBtrabajador;
+    private Trabajador PMtrabajador;
     private Trabajador CPUtrabajador;
     private Trabajador RAMtrabajador;
     private Trabajador FAtrabajador;
     private Trabajador GPUtrabajador;
     private int contador = 0;
     private int iteraciones;
+    private ListaSimple<Trabajador> PMtrabajadores;
+    private ListaSimple<Trabajador> CPUtrabajadores;
+    private ListaSimple<Trabajador> RAMtrabajadores;
+    private ListaSimple<Trabajador> FAtrabajadores;
+    private ListaSimple<Trabajador> GPUtrabajadores;
 
     /**
      * @return the produccion
@@ -95,68 +101,131 @@ public class Ensamblador extends Thread{
         }
     }
     
-    public Ensamblador(Semaphore mutex, Trabajador PBtrabajador, Trabajador CPUtrabajador, Trabajador RAMtrabajador, Trabajador FAtrabajador, Trabajador GPUtrabajador, int ArtificialTime, int iteraciones){
+    private boolean verificarTrabajadoresProdu(ListaSimple<Trabajador> listaTrabajadores, int Produrequerida) {
+        for (int i = 0; i < listaTrabajadores.size(); i++) {
+            Trabajador trabajador = listaTrabajadores.get(i);
+            if (trabajador.getProduccion() < Produrequerida) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private void reduceWorkersProduction(ListaSimple<Trabajador> listaTrabajadores, int qty) {
+        for (int i = 0; i < listaTrabajadores.size(); i++) {
+            Trabajador trabajador = listaTrabajadores.get(i);
+            trabajador.reducirProdu(qty);
+        }
+         
+    }
+    
+    
+    
+    public Ensamblador(Semaphore mutex, ListaSimple<Trabajador> listaPMtrabajadores, ListaSimple<Trabajador> listaCPUtrabajadores,ListaSimple<Trabajador> listaRAMtrabajadores, ListaSimple<Trabajador> listaFAtrabajadores, ListaSimple<Trabajador> listaGPUtrabajadores, int ArtificialTime, int iteraciones){
         this.mutex = mutex;
-        this.PBtrabajador = PBtrabajador;
+        this.PMtrabajador = PMtrabajador;
         this.CPUtrabajador = CPUtrabajador;
         this.RAMtrabajador = RAMtrabajador;
         this.FAtrabajador = FAtrabajador;
         this.GPUtrabajador = GPUtrabajador;
         this.tiempoProduArti = ArtificialTime;
         this.iteraciones = iteraciones;
+        this.PMtrabajadores = listaPMtrabajadores;
+        this.CPUtrabajadores = listaCPUtrabajadores;
+        this.RAMtrabajadores = listaRAMtrabajadores;
+        this.FAtrabajadores = listaFAtrabajadores;
+        this.GPUtrabajadores = listaGPUtrabajadores;
        
     }
     
     @Override
-    public void run(){
-        int contadorIte = 0;
-        while(contadorIte != this.iteraciones){
-            try{
-                if (contador<3){
-                    if(PBtrabajador.getProduccion() >= 2 && CPUtrabajador.getProduccion() >= 3 && RAMtrabajador.getProduccion()>=4 && FAtrabajador.getProduccion()>=6){
-                        this.mutex.release();
+    public void run() {
+        int counterIte = 0;
+        while(counterIte != this.iteraciones) {
+            try {
+                // Verificar que cada lista de trabajadores tiene suficiente producción
+                boolean canAssemble = true;
+
+                // Verificar si la lista de cada componente tiene trabajadores con producción suficiente
+                if (!verificarTrabajadoresProdu(PMtrabajadores, 1) || 
+                    !verificarTrabajadoresProdu(CPUtrabajadores, 5) ||
+                    !verificarTrabajadoresProdu(RAMtrabajadores, 6) || 
+                    !verificarTrabajadoresProdu(FAtrabajadores, 5)) {
+                    canAssemble = false;
+                }
+
+                if (canAssemble) {
+                    // Todos los trabajadores tienen suficiente producción, procedemos a ensamblar
+                    this.mutex.release(); // Signal
+
+                    // Ensamblar un producto y reducir la producción de los trabajadores
+                    produccion++;
+                    reduceWorkersProduction(PMtrabajadores, 1);
+                    reduceWorkersProduction(CPUtrabajadores, 5);
+                    reduceWorkersProduction(RAMtrabajadores, 6);
+                    reduceWorkersProduction(FAtrabajadores, 5);
+
+                    sleep(this.tiempoProduArti * 2);
+                    salariototal = (salario * tiempoProdu) + salariototal;
+
+                    
+
+                    contador++;
+                } else {
+                    // Si no hay suficiente producción, espera
+                    this.mutex.acquire(); // Wait
+                    sleep(this.tiempoProduArti);
+                    salariototal = (salario * 24) + salariototal;
+
+                    
+                }
+
+                // Si el contador alcanza 6, intentamos ensamblar con tarjeta gráfica
+                if (contador >= 3) {
+                    boolean canAssembleWithGraphics = true;
+
+                    // Verificar si todas las listas de trabajadores tienen producción suficiente, incluyendo las tarjetas gráficas
+                    if (!verificarTrabajadoresProdu(PMtrabajadores, 1) || 
+                        !verificarTrabajadoresProdu(CPUtrabajadores, 5) ||
+                        !verificarTrabajadoresProdu(RAMtrabajadores, 6) || 
+                        !verificarTrabajadoresProdu(FAtrabajadores, 5) ||
+                        !verificarTrabajadoresProdu(GPUtrabajadores, 1)) {
+                        canAssembleWithGraphics = false;
+                    }
+
+                    if (canAssembleWithGraphics) {
+                        // Ensamblar con tarjeta gráfica
+                        contador = 0;
+                        produccionGPU++;
+                        this.mutex.release(); // Signal
+
+                        // Reducir la producción de todos los componentes, incluyendo la tarjeta gráfica
+                        reduceWorkersProduction(PMtrabajadores, 1);
+                        reduceWorkersProduction(CPUtrabajadores, 5);
+                        reduceWorkersProduction(RAMtrabajadores, 6);
+                        reduceWorkersProduction(FAtrabajadores, 5);
+                        reduceWorkersProduction(GPUtrabajadores, 1);
+
+                        sleep(this.tiempoProduArti * 2);
+                        salariototal = (salario * tiempoProdu) + salariototal;
+
                         
-                        produccion = ++produccion;
-                        PBtrabajador.reducirProdu(2);
-                        CPUtrabajador.reducirProdu(3);
-                        RAMtrabajador.reducirProdu(4);
-                        FAtrabajador.reducirProdu(6);
-                        
-                        sleep(this.tiempoProduArti*2);
-                        salariototal=(salario*tiempoProdu)+salariototal;
-                        contador= ++contador;
-                    }else{
-                        this.mutex.acquire();
+                    } else {
+                        this.mutex.acquire(); // Wait
                         sleep(this.tiempoProduArti);
-                        salariototal=(salario*24)+salariototal;
+                        salariototal = (salario * 24) + salariototal;
+
                         
                     }
-                } else{
-                    if (PBtrabajador.getProduccion()>=2 && CPUtrabajador.getProduccion()>=3 && RAMtrabajador.getProduccion() >=4 && FAtrabajador.getProduccion() >= 6 && GPUtrabajador.getProduccion()>=5){
-                        contador=0;
-                        produccionGPU = ++produccionGPU;
-                        this.mutex.release();
-                        
-                        PBtrabajador.reducirProdu(2);
-                        CPUtrabajador.reducirProdu(3);
-                        RAMtrabajador.reducirProdu(4);
-                        FAtrabajador.reducirProdu(6);
-                        GPUtrabajador.reducirProdu(5);
-                        
-                        sleep(this.tiempoProduArti*2);
-                        salariototal = (salario*tiempoProdu)+salariototal;
-                        
-                    }else{
-                        this.mutex.acquire();
-                        sleep(this.tiempoProduArti);
-                        salariototal=(salario*24)+salariototal;
-                    } 
-                    }
-                } catch(InterruptedException ex) {
+                }
+            } catch (InterruptedException ex) {
                 Logger.getLogger(Ensamblador.class.getName()).log(Level.SEVERE, null, ex);
             }
-            contadorIte +=1;
-            }
-        
+
+            counterIte++;
+        }
     }
 }
+        
+    
+
