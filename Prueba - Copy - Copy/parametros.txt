@@ -62,3 +62,63 @@ Trabajadores fuente de alimentacion: 4
 Trabajadores tarjeta graficas: 3
 Ensamblador: 2
 -------------------------
+MSI:
+Segundos: 0.0
+Deathline: 5
+Trabajadores MB: 3
+Trabajadores CPU: 1
+Trabajadores RAM: 3
+Trabajadores fuente de alimentacion: 2
+Trabajadores tarjeta graficas: 3
+Ensamblador: 4
+-------------------------
+DELL:
+Segundos: 0.0
+Deathline: 5
+Trabajadores MB: 2
+Trabajadores CPU: 3
+Trabajadores RAM: 4
+Trabajadores fuente de alimentacion: 2
+Trabajadores tarjeta graficas: 2
+Ensamblador: 3
+-------------------------
+DELL:
+Segundos: 0.0
+Deathline: 5
+Trabajadores MB: 2
+Trabajadores CPU: 5
+Trabajadores RAM: 3
+Trabajadores fuente de alimentacion: 2
+Trabajadores tarjeta graficas: 3
+Ensamblador: 1
+-------------------------
+DELL:
+Segundos: 0.0
+Deathline: 3
+Trabajadores MB: 2
+Trabajadores CPU: 3
+Trabajadores RAM: 2
+Trabajadores fuente de alimentacion: 4
+Trabajadores tarjeta graficas: 3
+Ensamblador: 2
+-------------------------
+DELL:
+Segundos: 0.0
+Deathline: 4
+Trabajadores MB: 2
+Trabajadores CPU: 3
+Trabajadores RAM: 2
+Trabajadores fuente de alimentacion: 4
+Trabajadores tarjeta graficas: 3
+Ensamblador: 2
+-------------------------
+DELL:
+Segundos: 0.0
+Deathline: 5
+Trabajadores MB: 2
+Trabajadores CPU: 4
+Trabajadores RAM: 2
+Trabajadores fuente de alimentacion: 5
+Trabajadores tarjeta graficas: 2
+Ensamblador: 1
+-------------------------

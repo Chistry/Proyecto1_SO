@@ -9,6 +9,7 @@ package GUI;
  * @author diego
  */
 import DellTrabajadores.*;
+import EDD.ListaSimple;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,15 +29,16 @@ public class PantallaDell extends javax.swing.JFrame {
     private int gpuWorkers = 1;
     private final int MAX_WORKERS = 16;
     private int totalAssignedWorkers = ensambladores + pm + cpuWorkers + ramWorkers + faWorkers + gpuWorkers;
-    
+
     private ListaSimple<Trabajador> PMlistaTrabajadores = new ListaSimple<>();
     private ListaSimple<Trabajador> CPUlistaTrabajadores = new ListaSimple<>();
     private ListaSimple<Trabajador> RAMlistaTrabajadores = new ListaSimple<>();
     private ListaSimple<Trabajador> FAlistaTrabajadores = new ListaSimple<>();
     private ListaSimple<Trabajador> GPUlistaTrabajadores = new ListaSimple<>();
+    private ListaSimple<Ensamblador> listaEnsamblador = new ListaSimple<>();
+
 
     
-    private ListaSimple<Ensamblador> listaEnsamblador = new ListaSimple<>();
 
 
     public PantallaDell() {
@@ -105,7 +107,9 @@ public class PantallaDell extends javax.swing.JFrame {
             
             // Crear los productores dinámicamente según la asignación del usuario
         for (int i = 0; i < pm; i++) {
-            Trabajador mbWorker = new PMtrabajador(mutex, milisegundos, diastotales);
+
+            Trabajador mbWorker = new PBtrabajador(mutex, milisegundos, diastotales);
+
             PMlistaTrabajadores.insertar(mbWorker);
             mbWorker.start();
         }
@@ -159,7 +163,35 @@ public class PantallaDell extends javax.swing.JFrame {
         //javax.swing.JOptionPane.showMessageDialog(this, "Ganancia Bruta: " + gananciaBruta + "\nCostos Operativos: " + costosOperativos + "\nUtilidad del estudio: " + UtilidadEstudio);
         
         }
-        
+
+    
+    private int calcularCostosOperativos(ProjectManager projectmanager, Director director) {
+        int totalSalarios = 0;
+
+        // Sumar salarios de cada tipo de trabajador
+        for (Trabajador trabajador : PMlistaTrabajadores) {
+            totalSalarios += trabajador.getSalariototal();
+        }
+        for (Trabajador trabajador : CPUlistaTrabajadores) {
+            totalSalarios += trabajador.getSalariototal();
+        }
+        for (Trabajador trabajador : RAMlistaTrabajadores) {
+            totalSalarios += trabajador.getSalariototal();
+        }
+        for (Trabajador trabajador : FAlistaTrabajadores) {
+            totalSalarios += trabajador.getSalariototal();
+        }
+        for (Trabajador trabajador : GPUlistaTrabajadores) {
+            totalSalarios += trabajador.getSalariototal();
+        }
+
+        // Sumar salarios del Project Manager y el Director
+        totalSalarios += projectmanager.getSalariototal(); // Asegúrate de que tengas un método getSalary en ProjectManager
+        totalSalarios += director.getSalariototal(); // Asegúrate de que tengas un método getSalary en Director
+
+        return totalSalarios;
+    }
+
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
