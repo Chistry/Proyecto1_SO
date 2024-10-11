@@ -5,6 +5,7 @@
 package main;
 
 import DellTrabajadores.*;
+import GUI.Graficas;
 import GUI.PantallaDell;
 import GUI.PantallaMSI;
 
@@ -37,7 +38,12 @@ public class ProductoresComputadoras {
         
         PantallaMSI pantaMSI = new PantallaMSI();
         pantaMSI.setVisible(true);
-        pantaMSI.setLocationRelativeTo(null);
+        pantaMSI.setLocationRelativeTo(pantadell);
+        
+        Graficas pantagraf = new Graficas();
+        pantagraf.setVisible(true);
+        pantagraf.setLocationRelativeTo(pantaMSI);
+               
         
        /** Scanner input = new Scanner(System.in);
 

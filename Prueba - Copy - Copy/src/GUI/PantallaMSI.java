@@ -118,6 +118,7 @@ public class PantallaMSI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel28 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -170,6 +171,9 @@ public class PantallaMSI extends javax.swing.JFrame {
         workersAssembler2 = new javax.swing.JLabel();
         bruto = new javax.swing.JLabel();
         ganaciasTotales = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+
+        jLabel28.setBackground(new java.awt.Color(255, 0, 0));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -179,8 +183,9 @@ public class PantallaMSI extends javax.swing.JFrame {
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel1.setFont(new java.awt.Font("MV Boli", 0, 54)); // NOI18N
         jLabel1.setText("MSI");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 110, 80));
 
         jButton1.setText("Iniciar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -188,7 +193,7 @@ public class PantallaMSI extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 18)); // NOI18N
         jLabel2.setText("Trabajadores");
@@ -425,6 +430,9 @@ public class PantallaMSI extends javax.swing.JFrame {
         ganaciasTotales.setText("0");
         jPanel2.add(ganaciasTotales, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 340, 100, 20));
 
+        jPanel3.setBackground(new java.awt.Color(225, 33, 33));
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 430));
+
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 440));
 
         pack();
@@ -642,6 +650,7 @@ public class PantallaMSI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -651,6 +660,7 @@ public class PantallaMSI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JButton masCPU;
     private javax.swing.JButton masEnsamblador;
     private javax.swing.JButton masFA;
@@ -671,4 +681,9 @@ public class PantallaMSI extends javax.swing.JFrame {
     private javax.swing.JLabel workersgc;
     private javax.swing.JLabel workersram;
     // End of variables declaration//GEN-END:variables
-}
+    
+    
+        
+    
+    }
+
