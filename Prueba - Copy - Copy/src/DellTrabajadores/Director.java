@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DellTrabajadores;
+import EDD.ListaSimple;
 import static java.lang.Thread.sleep;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
@@ -25,7 +26,7 @@ public class Director extends Thread {
     private boolean anime;
     private int limiteDirector;
     private ProjectManager ProjectManager;
-    private Ensamblador Ensamblador;
+    private ListaSimple<Ensamblador> Ensambladores;
     private int iteraciones;
     private int ventas=0;
 
@@ -70,20 +71,13 @@ public class Director extends Thread {
     public void setVentas(int ventas) {
         this.ventas = ventas;
     }
-    public Director(Semaphore mutex, int tiempoProduArti, ProjectManager ProjectManager, Ensamblador ensamblador, int iteraciones){
-        this.nombre = nombre;
+    public Director(Semaphore mutex, int tiempoProduArti, ProjectManager ProjectManager,
+                        ListaSimple<Ensamblador> listaEnsamblador, int iteraciones) {
         this.mutex = mutex;
         this.tiempoProduArti = tiempoProduArti;
-        this.salario= salario;
-        this.maxprodu =  maxprodu;
-        this.tiempoProdu = tiempoProdu;
-        this.anime=anime;
-        this.limiteDirector=limiteDirector;
-        this.ProjectManager=ProjectManager;
-        this.iteraciones=iteraciones;
-        this.ventas = ventas;
-        this.Ensamblador=ensamblador;
-        
+        this.ProjectManager = ProjectManager;
+        this.iteraciones = iteraciones;
+        this.Ensambladores= listaEnsamblador;
     }
     
     @Override
@@ -107,15 +101,15 @@ public void run() {
                         sleep(this.tiempoProduArti);
 
                         // Realiza la venta de computadoras si hay producción
-                        if (this.Ensamblador.getProduccionGPU() > 0 || this.Ensamblador.getProduccion() > 0) {
-                            if (this.Ensamblador.getProduccionGPU()> 0) {
-                                this.Ensamblador.setProduccionGPU(this.Ensamblador.getProduccionGPU()- 1);
-                                ventas += 250000;
-                            } else {
-                                this.Ensamblador.setProduccion(this.Ensamblador.getProduccion()- 1);
-                                ventas += 180000;
+                        for (Ensamblador ensamblador : Ensambladores) {
+                                if (ensamblador.getProduccionGPU()> 0) {
+                                    ensamblador.setProduccionGPU(ensamblador.getProduccionGPU() - 1);
+                                    ventas += 120000;
+                                } else if (ensamblador.getProduccion() > 0) {
+                                    ensamblador.setProduccion(ensamblador.getProduccion() - 1);
+                                    ventas += 80000;
+                                }
                             }
-                        }
 
                         System.out.println("Ventas realizadas: " + ventas);
 
