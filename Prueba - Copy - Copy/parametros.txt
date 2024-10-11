@@ -2,3 +2,63 @@ Segundos: 0.001
 Deathline: 5
 N: 0
 -------------------------
+MSI:
+Segundos: 0.0
+Deathline: 5
+Trabajadores MB: 2
+Trabajadores CPU: 2
+Trabajadores RAM: 3
+Trabajadores fuente de alimentacion: 3
+Trabajadores tarjeta graficas: 3
+Ensamblador: 3
+-------------------------
+DELL:
+Segundos: 1.0
+Deathline: 3
+Trabajadores MB: 3
+Trabajadores CPU: 3
+Trabajadores RAM: 2
+Trabajadores fuente de alimentacion: 2
+Trabajadores tarjeta graficas: 2
+Ensamblador: 4
+-------------------------
+MSI:
+Segundos: 0.0
+Deathline: 5
+Trabajadores MB: 3
+Trabajadores CPU: 3
+Trabajadores RAM: 1
+Trabajadores fuente de alimentacion: 4
+Trabajadores tarjeta graficas: 4
+Ensamblador: 1
+-------------------------
+MSI:
+Segundos: 0.0
+Deathline: 5
+Trabajadores MB: 3
+Trabajadores CPU: 3
+Trabajadores RAM: 2
+Trabajadores fuente de alimentacion: 4
+Trabajadores tarjeta graficas: 2
+Ensamblador: 2
+-------------------------
+MSI:
+Segundos: 1.0
+Deathline: 4
+Trabajadores MB: 3
+Trabajadores CPU: 3
+Trabajadores RAM: 2
+Trabajadores fuente de alimentacion: 4
+Trabajadores tarjeta graficas: 2
+Ensamblador: 2
+-------------------------
+MSI:
+Segundos: 1.0
+Deathline: 5
+Trabajadores MB: 2
+Trabajadores CPU: 2
+Trabajadores RAM: 3
+Trabajadores fuente de alimentacion: 4
+Trabajadores tarjeta graficas: 3
+Ensamblador: 2
+-------------------------

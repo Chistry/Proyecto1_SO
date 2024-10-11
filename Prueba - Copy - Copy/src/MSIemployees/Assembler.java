@@ -10,9 +10,12 @@ package MSIemployees;
  */
 
 import EDD.ListaSimple;
+import GUI.PantallaMSI;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 
 
@@ -42,7 +45,7 @@ public class Assembler extends Thread{
     private ListaSimple<Worker> workersRAM;
     private ListaSimple<Worker> workersPS;
     private ListaSimple<Worker> workersGC;
-    
+    private JLabel cpuLabel, gcLabel, psLabel, ramLabel, mbLabel, pcLabel, pcConCpuLabel;
 
     
     
@@ -108,23 +111,40 @@ public class Assembler extends Thread{
     }
 
 
-    
-    
-        public Assembler(Semaphore mutex, ListaSimple<Worker> workersListMB, ListaSimple<Worker> workersListCPU, ListaSimple<Worker> workersListRAM, ListaSimple<Worker> workersListPS, ListaSimple<Worker> workersListGC, int ArtificialTime, int iteraciones){
-        this.mutex = mutex;
-        this.MBproducer = MBproducer;
-        this.CPUproducer = CPUproducer;
-        this.RAMproducer = RAMproducer;
-        this.PSproducer = PSproducer;
-        this.GCproducer = GCproducer;
-        this.ArtiproductionTime= ArtificialTime;
-        this.iteraciones=iteraciones;
-        this.workersMB = workersListMB;
-        this.workersCPU = workersListCPU;
-        this.workersRAM = workersListRAM;
-        this.workersPS = workersListPS;
-        this.workersGC= workersListGC;
+    private void updateLabels() {
+        SwingUtilities.invokeLater(() -> {
+            cpuLabel.setText("CPU: " + workersCPU.size());
+            gcLabel.setText("GC: " + productionGC);
+            psLabel.setText("PS: " + workersPS.size());
+            ramLabel.setText("RAM: " + workersRAM.size());
+            mbLabel.setText("MB: " + workersMB.size());
+            pcLabel.setText("PC: " + production);
+            pcConCpuLabel.setText("PC con CPU: " + (production + productionGC)); // Ejemplo de cálculo
+        });
     }
+    
+        
+
+public Assembler(Semaphore mutex, ListaSimple<Worker> workersListMB, ListaSimple<Worker> workersListCPU, ListaSimple<Worker> workersListRAM, ListaSimple<Worker> workersListPS,  ListaSimple<Worker> workersListGC, int ArtificialTime, int iteraciones, JLabel cpuLabel, JLabel gcLabel, JLabel psLabel,  JLabel ramLabel, JLabel mbLabel, JLabel pcLabel, JLabel pcConCpuLabel) {
+    this.mutex = mutex;
+    this.ArtiproductionTime = ArtificialTime;
+    this.iteraciones = iteraciones;
+    this.workersMB = workersListMB;
+    this.workersCPU = workersListCPU;
+    this.workersRAM = workersListRAM;
+    this.workersPS = workersListPS;
+    this.workersGC = workersListGC;
+
+    // Agregar referencias a los JLabels
+    this.cpuLabel = cpuLabel;
+    this.gcLabel = gcLabel;
+    this.psLabel = psLabel;
+    this.ramLabel = ramLabel;
+    this.mbLabel = mbLabel;
+    this.pcLabel = pcLabel;
+    this.pcConCpuLabel = pcConCpuLabel;
+}
+
     
     
         
@@ -141,8 +161,10 @@ public class Assembler extends Thread{
                     !checkWorkersProduction(workersCPU, 3) ||
                     !checkWorkersProduction(workersRAM, 4) || 
                     !checkWorkersProduction(workersPS, 6)) {
+                    updateLabels();
                     canAssemble = false;
                 }
+                
 
                 if (canAssemble) {
                     // Todos los trabajadores tienen suficiente producción, procedemos a ensamblar
@@ -162,6 +184,7 @@ public class Assembler extends Thread{
                     System.out.println("Salario: " + this.totalsalary);
                     System.out.println("Computadores con Graficas: " + this.productionGC);
                     System.out.println("ElementosFabricados: " + this.production + "\n");
+                    updateLabels();
 
                     counter++;
                 } else {
@@ -174,6 +197,7 @@ public class Assembler extends Thread{
                     System.out.println("Salario: " + this.totalsalary);
                     System.out.println("Computadores con Graficas: " + this.productionGC);
                     System.out.println("ElementosFabricados: " + this.production + "\n");
+                    updateLabels();
                 }
 
                 // Si el contador alcanza 6, intentamos ensamblar con tarjeta gráfica
@@ -187,6 +211,7 @@ public class Assembler extends Thread{
                         !checkWorkersProduction(workersPS, 6) ||
                         !checkWorkersProduction(workersGC, 5)) {
                         canAssembleWithGraphics = false;
+                        updateLabels();
                     }
 
                     if (canAssembleWithGraphics) {
@@ -209,6 +234,7 @@ public class Assembler extends Thread{
                         System.out.println("Salario: " + this.totalsalary);
                         System.out.println("Computadores con Graficas: " + this.productionGC);
                         System.out.println("ElementosFabricados: " + this.production + "\n");
+                        updateLabels();
                     } else {
                         this.mutex.acquire(); // Wait
                         sleep(this.ArtiproductionTime);
@@ -219,6 +245,7 @@ public class Assembler extends Thread{
                         System.out.println("Computadores con Graficas: " + this.productionGC);
                         System.out.println("ElementosFabricados: " + this.production + "\n");
                         System.out.println("No hay suficientes componentes para ensamblar con tarjeta gráfica");
+                        updateLabels();
                     }
                 }
             } catch (InterruptedException ex) {

@@ -138,7 +138,7 @@ public class Ensamblador extends Thread{
        
     }
     
-    @Override
+
     public void run() {
         int counterIte = 0;
         while(counterIte != this.iteraciones) {
